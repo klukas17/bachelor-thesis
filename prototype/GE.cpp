@@ -6,9 +6,11 @@
 #include <map>
 #include <iostream>
 #include <fstream> 
+#include <sstream>
 
 const int CODON_COUNT = 50;
 const int POPULATION_SIZE = 20;
+const std::string grammar_path = "grammars/gram01.bnf";
 
 class Unit
 {
@@ -35,8 +37,103 @@ class Grammar
         std::string start_state;
         std::map<std::string, std::vector<std::vector<std::string>>> productions;
         
-        Grammar(){}
+        Grammar()
+        {
+            std::string file_name(grammar_path);
+            FILE *grammar_file = fopen(file_name.c_str(), "r");
+
+            GrammarParsingState state = GrammarParsingState::start;
+            char c;
+            std::stringstream stream;
+            std::string left_side_symbol;
+            std::vector<std::vector<std::string>> right_sides;
+            std::vector<std::string> right_side;
+            std::string temp_string;
+
+            while ((c = fgetc(grammar_file)) != EOF) {
+                switch(state) {
+
+                    case GrammarParsingState::start:
+                        if (c == '<')
+                        {
+                            stream << c;
+                            state = GrammarParsingState::new_symbol;
+                        }
+                        else 
+                            exit(1);
+                        break;
+
+                    case GrammarParsingState::new_symbol:
+                        stream << c;
+                        if (c == '>')
+                        {
+                            state = GrammarParsingState::is_one;
+                            left_side_symbol = stream.str();
+                            stream.str("");
+                        }
+                        break;
+
+                    case GrammarParsingState::is_one:
+                        if (c == ' ' || c == '\t')
+                            continue;
+                        if (c == ':')
+                            state = GrammarParsingState::is_two;
+                        else
+                            exit(1);
+                        break;
+
+                    case GrammarParsingState::is_two:
+                        if (c == ':')
+                            state = GrammarParsingState::is_three;
+                        else
+                            exit(1);
+                        break;
+
+                    case GrammarParsingState::is_three:
+                        if (c == '=')
+                            state = GrammarParsingState::right_side;
+                        else
+                            exit(1);
+                        break;
+                    case GrammarParsingState::right_side:
+                        if (c == ' ' || c == '\t')
+                            continue;
+                        if (c == '|')
+                        {
+                            // TODO
+                        }
+                        else if (c != '<') 
+                        {
+                            temp_string = std::string(1, c);
+                            right_side.push_back(temp_string);
+                        }
+                        else 
+                        {
+                            state = GrammarParsingState::right_side_state;
+                            stream << c;
+                        }
+                        break;
+
+                    case GrammarParsingState::right_side_state:
+                        stream << c;
+                        if (c == '>')
+                        {
+                            state = GrammarParsingState::right_side;
+                            temp_string = stream.str();
+                            stream.str("");
+                            right_side.push_back(temp_string);
+                        }
+                        break;
+                }
+            }
+
+            fclose(grammar_file);
+        }
         ~Grammar(){}
+
+        enum GrammarParsingState {
+            start, new_symbol, is_one, is_two, is_three, right_side, right_side_state
+        };
 };
 
 class Symbol
@@ -55,6 +152,7 @@ class GrammaticalEvolution
     public:
 
         std::vector<Unit> population;
+        Grammar grammar;
 
         GrammaticalEvolution()
         {
@@ -72,7 +170,7 @@ int main()
     GrammaticalEvolution GE = GrammaticalEvolution();
     char* arr = GE.population[0].genome;
 
-    std::string file_name("grammars/gram01.bnf");
+    std::string file_name(grammar_path);
     FILE *grammar_file = fopen(file_name.c_str(), "r");
 
     char c;
