@@ -11,19 +11,18 @@
 
 const int CODON_COUNT = 50;
 const int POPULATION_SIZE = 20;
-const std::string grammar_path = "grammars/gram03.bnf";
+const int MAX_NUMBER_OF_WRAPPING = 5;
+const std::string grammar_path = "grammars/gram04.bnf";
 
 class Unit
 {
     public:
 
-        char genome[CODON_COUNT];
-        int size;
+        unsigned char genome[CODON_COUNT];
 
-        Unit(int size)
+        Unit()
         {
-            this->size = size;
-            for (int i = 0; i < this->size; i++)
+            for (int i = 0; i < CODON_COUNT; i++)
             {
                 this->genome[i] = rand();
             }
@@ -207,24 +206,54 @@ class Grammar
 
     enum GrammarParsingState 
     {
-        start, new_symbol, is_one, is_two, is_three, right_side, right_side_state, potential_break, end, single_quotes, double_quotes
+        start, 
+        new_symbol, 
+        is_one, 
+        is_two, 
+        is_three, 
+        right_side, 
+        right_side_state, 
+        potential_break, 
+        end, 
+        single_quotes, 
+        double_quotes
     };
 
-    enum SymbolType
-    {
-        terminal, non_terminal
-    };
+};
+
+enum SymbolType
+{
+    terminal, 
+    non_terminal
 };
 
 class Symbol
 {
     public:
 
-        int type;
+        SymbolType type;
         std::string value;
 
+        Symbol(SymbolType type, std::string value){
+            this->type = type;
+            this->value = value;
+        }
         Symbol(){}
         ~Symbol(){}
+};
+
+class Node
+{
+    public:
+        Symbol symbol;
+        Node* next;
+
+        Node(Symbol symbol)
+        {
+            this->symbol = symbol;
+            this->next = NULL;
+        }
+        ~Node(){}
 };
 
 class GrammaticalEvolution
@@ -238,26 +267,135 @@ class GrammaticalEvolution
         {
             for (int i = 0; i < POPULATION_SIZE; i++)
             {
-                this->population.push_back(Unit(CODON_COUNT));
+                this->population.push_back(Unit());
             }
         }
         ~GrammaticalEvolution(){}
+
+        void decode(Unit unit)
+        {
+            Node* HEAD = new Node(Symbol(SymbolType::non_terminal, grammar.start_symbol));
+            Node* curr = HEAD;
+            Node* prev = NULL;
+
+            int wrap_count = 0;
+            int curr_codon = 0;
+
+            print_sequence(curr);
+            std::cout << std::endl;
+
+            while (curr)
+            {
+                if (curr->symbol.type == SymbolType::terminal)
+                {
+                    prev = curr;
+                    curr = curr->next;
+                    continue;
+                }
+
+                if (!grammar.productions.count(curr->symbol.value))
+                {
+                    exit(1);
+                }
+
+                int count = grammar.productions[curr->symbol.value].size();
+                int chosen_production_index = unit.genome[curr_codon] % count;
+                std::vector<std::pair<std::string, int>>* chosen_production = &grammar.productions[curr->symbol.value][chosen_production_index];
+
+                Node* first = NULL;
+                Node* last = NULL;
+                
+                for (std::pair<std::string, int> p : *chosen_production)
+                {
+                    if (!first)
+                    {
+                        // TODO : merge if-else into one command
+                        if (p.second == 1)
+                        {
+                            first = new Node(Symbol(SymbolType::non_terminal, p.first));
+                        }
+                        else
+                        {
+                            first = new Node(Symbol(SymbolType::terminal, p.first));
+                        }
+
+                        last = first;
+                    }
+                    else
+                    {
+                        Node* new_node = NULL;
+                        // TODO : merge if-else into one command
+                        if (p.second == 1)
+                        {
+                            new_node = new Node(Symbol(SymbolType::non_terminal, p.first));
+                        }
+                        else
+                        {
+                            new_node = new Node(Symbol(SymbolType::terminal, p.first));
+                        }
+
+                        last->next = new_node;
+                        last = new_node;
+                    }
+
+                }
+
+                if (prev)
+                    prev->next = first;
+                else
+                    HEAD = first;
+
+                last->next = curr->next;
+
+                (*curr).~Node();
+                curr = first;
+
+                print_sequence(HEAD);
+                std::cout << std::endl;
+
+                curr_codon++;
+                if (curr_codon == CODON_COUNT)
+                {
+                    curr_codon = 0;
+                    wrap_count++;
+                    if (wrap_count > MAX_NUMBER_OF_WRAPPING)
+                        exit(1);
+                }
+            }
+        }
+
+        void print_sequence(Node* curr) {
+            std::cout << curr->symbol.value;
+            if (curr->next)
+                print_sequence(curr->next);
+        }
 };
+
 
 int main() 
 {
     srand(time(0));
     GrammaticalEvolution GE = GrammaticalEvolution();
-    char* arr = GE.population[0].genome;
-
-    std::string file_name(grammar_path);
-    FILE *grammar_file = fopen(file_name.c_str(), "r");
-
-    char c;
-    while ((c = fgetc(grammar_file)) != EOF)
-        std::cout << c;
-
-    fclose(grammar_file);
+    GE.population[0].genome[0] = 2;
+    GE.population[0].genome[1] = 1;
+    GE.population[0].genome[2] = 1;
+    GE.population[0].genome[3] = 0;
+    GE.population[0].genome[4] = 0;
+    GE.population[0].genome[5] = 0;
+    GE.population[0].genome[6] = 1;
+    GE.population[0].genome[7] = 1;
+    GE.population[0].genome[8] = 1;
+    GE.population[0].genome[9] = 2;
+    GE.population[0].genome[10] = 0;
+    GE.population[0].genome[11] = 0;
+    GE.population[0].genome[12] = 0;
+    GE.population[0].genome[13] = 0;
+    GE.population[0].genome[14] = 0;
+    GE.population[0].genome[15] = 1;
+    GE.population[0].genome[16] = 1;
+    GE.population[0].genome[17] = 0;
+    GE.population[0].genome[18] = 0;
+    GE.decode(GE.population[0]);
 }
 
 /* TODO:
