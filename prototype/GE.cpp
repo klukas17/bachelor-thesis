@@ -11,7 +11,7 @@
 
 const int CODON_COUNT = 50;
 const int POPULATION_SIZE = 20;
-const std::string grammar_path = "grammars/gram02.bnf";
+const std::string grammar_path = "grammars/gram03.bnf";
 
 class Unit
 {
@@ -109,7 +109,7 @@ class Grammar
                     case GrammarParsingState::right_side:
                         if (c == ' ' || c == '\t')
                             continue;
-                        if (c == '|')
+                        else if (c == '|')
                         {
                             right_sides.push_back(right_side);
                             right_side.clear();
@@ -118,6 +118,14 @@ class Grammar
                         else if (c == '\n')
                         {
                             state = GrammarParsingState::potential_break;
+                        }
+                        else if (c == '\'')
+                        {
+                            state = GrammarParsingState::single_quotes;
+                        }
+                        else if (c == '"')
+                        {
+                            state = GrammarParsingState::double_quotes;
                         }
                         else if (c != '<') 
                         {
@@ -163,6 +171,30 @@ class Grammar
                             state = GrammarParsingState::right_side;
                         }
                         break;
+
+                    case GrammarParsingState::single_quotes:
+                        if (c == '\'')
+                        {
+                            temp_string = stream.str();
+                            stream.str("");
+                            right_side.push_back(std::pair<std::string, int>{temp_string, 0});
+                            state = GrammarParsingState::right_side;
+                        }
+                        else
+                            stream << c;
+                        break;
+
+                    case GrammarParsingState::double_quotes:
+                        if (c == '"')
+                        {
+                            temp_string = stream.str();
+                            stream.str("");
+                            right_side.push_back(std::pair<std::string, int>{temp_string, 0});
+                            state = GrammarParsingState::right_side;
+                        }
+                        else
+                            stream << c;
+                        break;
                 }
 
                 if (c == EOF)
@@ -175,7 +207,7 @@ class Grammar
 
     enum GrammarParsingState 
     {
-        start, new_symbol, is_one, is_two, is_three, right_side, right_side_state, potential_break, end
+        start, new_symbol, is_one, is_two, is_three, right_side, right_side_state, potential_break, end, single_quotes, double_quotes
     };
 
     enum SymbolType
@@ -230,5 +262,4 @@ int main()
 
 /* TODO:
     parametrize pairs in Grammar with SymbolType, not int
-    set start_state in Grammar
 */
