@@ -11,7 +11,7 @@
 
 const int CODON_COUNT = 50;
 const int POPULATION_SIZE = 20;
-const std::string grammar_path = "grammars/gram01.bnf";
+const std::string grammar_path = "grammars/gram02.bnf";
 
 class Unit
 {
@@ -35,7 +35,7 @@ class Grammar
     {
     public:
         
-        std::string start_state;
+        std::string start_symbol;
         std::map<std::string, std::vector<std::vector<std::pair<std::string, int>>>> productions;
         
         Grammar()
@@ -51,10 +51,13 @@ class Grammar
             std::vector<std::pair<std::string, int>> right_side;
             std::string temp_string;
 
-            while ((c = fgetc(grammar_file)) != EOF) {
+            while (true) {
 
-                // for debugging purposes
-                std::cout << c << std::endl;
+                c = fgetc(grammar_file);
+                if (c == EOF)
+                {
+                    state = GrammarParsingState::end;
+                }
 
                 switch(state) {
 
@@ -74,6 +77,8 @@ class Grammar
                         {
                             state = GrammarParsingState::is_one;
                             left_side_symbol = stream.str();
+                            if (start_symbol == "")
+                                start_symbol = left_side_symbol;
                             stream.str("");
                         }
                         break;
@@ -117,7 +122,7 @@ class Grammar
                         else if (c != '<') 
                         {
                             temp_string = std::string(1, c);
-                            right_side.push_back(std::pair<std::string, int>{temp_string, 1});
+                            right_side.push_back(std::pair<std::string, int>{temp_string, 0});
                         }
                         else 
                         {
@@ -133,18 +138,24 @@ class Grammar
                             state = GrammarParsingState::right_side;
                             temp_string = stream.str();
                             stream.str("");
-                            right_side.push_back(std::pair<std::string, int>{temp_string, 0});
+                            right_side.push_back(std::pair<std::string, int>{temp_string, 1});
                         }
                         break;
 
+                    case GrammarParsingState::end:
                     case GrammarParsingState::potential_break:
-                        if (c == '<')
+                        if (c == '<' || c == EOF)
                         {
                             stream << c;
                             state = GrammarParsingState::new_symbol;
                             right_sides.push_back(right_side);
                             right_side.clear();
-                            productions[left_side_symbol] = right_sides;
+                            if (productions.count(left_side_symbol))
+                            {
+                                productions[left_side_symbol].insert(productions[left_side_symbol].end(), right_sides.begin(), right_sides.end());
+                            }
+                            else
+                                productions[left_side_symbol] = right_sides;
                             right_sides.clear();
                         }
                         else
@@ -153,6 +164,9 @@ class Grammar
                         }
                         break;
                 }
+
+                if (c == EOF)
+                    break;
             }
 
             fclose(grammar_file);
@@ -161,7 +175,7 @@ class Grammar
 
     enum GrammarParsingState 
     {
-        start, new_symbol, is_one, is_two, is_three, right_side, right_side_state, potential_break
+        start, new_symbol, is_one, is_two, is_three, right_side, right_side_state, potential_break, end
     };
 
     enum SymbolType
@@ -216,4 +230,5 @@ int main()
 
 /* TODO:
     parametrize pairs in Grammar with SymbolType, not int
+    set start_state in Grammar
 */
