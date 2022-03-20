@@ -24,13 +24,13 @@ const std::string grammar_path = "grammars/gram04.bnf";
 GrammaticalEvolution::GrammaticalEvolution() {
     grammar = new Grammar(grammar_path);
     for (int i = 0; i < POPULATION_SIZE; i++) {
-        this->population.push_back(Unit(CODON_COUNT));
+        this->population.push_back(new Unit(CODON_COUNT));
     }
 }
 
 GrammaticalEvolution::~GrammaticalEvolution() {}
 
-void GrammaticalEvolution::decode(Unit unit) {
+void GrammaticalEvolution::decode(Unit* unit) {
     Node* HEAD = new Node(Symbol(SymbolType::non_terminal, (*grammar).start_symbol));
     Node* curr = HEAD;
     Node* prev = NULL;
@@ -56,7 +56,7 @@ void GrammaticalEvolution::decode(Unit unit) {
         }
 
         int count = (*grammar).productions[curr->symbol.value].size();
-        int chosen_production_index = unit.genome[curr_codon] % count;
+        int chosen_production_index = (*unit).genome[curr_codon] % count;
         std::vector<std::pair<std::string, SymbolType>> chosen_production = (*grammar).productions[curr->symbol.value][chosen_production_index];
 
         Node* first = NULL;

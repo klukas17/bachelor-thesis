@@ -19,13 +19,13 @@ class GrammaticalEvolution
 {
     public:
 
-        std::vector<Unit> population;
+        std::vector<Unit*> population;
         Grammar* grammar;
 
         GrammaticalEvolution();
         ~GrammaticalEvolution();
 
-        void decode(Unit unit);
+        void decode(Unit* unit);
 
         void print_sequence(Node* curr);
 };
