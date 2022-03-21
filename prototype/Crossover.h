@@ -4,5 +4,5 @@
 
 class Crossover {
     public:
-        Unit perform(Unit unit1, Unit unit2);
+        Unit* perform(Unit* unit1, Unit* unit2);
 };
