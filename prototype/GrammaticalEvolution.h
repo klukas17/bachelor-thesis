@@ -25,7 +25,7 @@ class GrammaticalEvolution
         GrammaticalEvolution();
         ~GrammaticalEvolution();
 
-        void decode(Unit* unit);
+        std::string decode(Unit* unit);
 
         void print_sequence(Node* curr);
 };

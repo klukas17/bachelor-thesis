@@ -30,7 +30,7 @@ GrammaticalEvolution::GrammaticalEvolution() {
 
 GrammaticalEvolution::~GrammaticalEvolution() {}
 
-void GrammaticalEvolution::decode(Unit* unit) {
+std::string GrammaticalEvolution::decode(Unit* unit) {
     Node* HEAD = new Node(Symbol(SymbolType::non_terminal, (*grammar).start_symbol));
     Node* curr = HEAD;
     Node* prev = NULL;
@@ -38,8 +38,8 @@ void GrammaticalEvolution::decode(Unit* unit) {
     int wrap_count = 0;
     int curr_codon = 0;
 
-    print_sequence(curr);
-    std::cout << std::endl;
+    //print_sequence(curr);
+    //std::cout << std::endl;
 
     while (curr)
     {
@@ -100,8 +100,8 @@ void GrammaticalEvolution::decode(Unit* unit) {
             curr = first;
         }
 
-        print_sequence(HEAD);
-        std::cout << std::endl;
+        //print_sequence(HEAD);
+        //std::cout << std::endl;
 
         curr_codon++;
         if (curr_codon == CODON_COUNT)
@@ -112,6 +112,19 @@ void GrammaticalEvolution::decode(Unit* unit) {
                 exit(1);
         }
     }
+
+    std::stringstream ss;
+    for (auto p = HEAD; p; p = p->next) {
+        auto r = p;
+        ss << p->symbol.value;
+        delete p;
+        p = r;
+    }
+
+    std::string ret_val;
+    ss >> ret_val;
+
+    return ret_val;
 }
 
 void GrammaticalEvolution::print_sequence(Node* curr) {
