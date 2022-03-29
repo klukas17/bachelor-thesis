@@ -2,8 +2,11 @@
 
 class LRU : public Strategy {
     public:
-        virtual void simulate();
+        std::map<int, int> page_access_count;
 
-        LRU(std::vector<int> r);
+        LRU(std::vector<int> r, int p_c, int f_c);
         ~LRU();
+
+        virtual void simulate();
+        virtual void allocate(int page_request);
 };
