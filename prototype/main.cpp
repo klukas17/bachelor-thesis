@@ -55,12 +55,17 @@ int main()
 
     std::cout << requests.size() << std::endl;
 
-    Strategy* s1 = new FIFO();
-    Strategy* s2 = new LRU();
-    Strategy* s3 = new CLOCK();
-    Strategy* s4 = new OPT();
+    Strategy* s1 = new FIFO(requests);
+    Strategy* s2 = new LRU(requests);
+    Strategy* s3 = new CLOCK(requests);
+    Strategy* s4 = new OPT(requests);
     s1->simulate();
     s2->simulate();
     s3->simulate();
     s4->simulate();
+
+    std::cout << s1->requests.size() << " " << s1->hits << " " << s1->misses << std::endl;
+    std::cout << s2->requests.size() << " " << s2->hits << " " << s2->misses << std::endl;
+    std::cout << s3->requests.size() << " " << s3->hits << " " << s3->misses << std::endl;
+    std::cout << s4->requests.size() << " " << s4->hits << " " << s4->misses << std::endl;
 }
