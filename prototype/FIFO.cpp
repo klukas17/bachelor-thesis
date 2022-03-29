@@ -1,5 +1,4 @@
 #include "FIFO.h"
-#include <iostream>
 
 FIFO::FIFO(std::vector<int> r, int p_c, int f_c) : Strategy(r, p_c, f_c) {}
 FIFO::~FIFO() {}
@@ -12,7 +11,6 @@ void FIFO::simulate() {
 void FIFO::allocate(int page_request) {
     if (page_to_frame[page_request] != -1) {
         hits++;
-        std::cout << "HIT " << page_request << " HC=" << hits << std::endl;
     }
     else {
         misses++;
@@ -40,14 +38,5 @@ void FIFO::allocate(int page_request) {
             page_to_frame[page_request] = frame;
             FIFO_queue.push(frame);
         }
-        std::cout << "MISS " << page_request << " MC=" << misses << std::endl;
     }
-    std::cout << "PAGE_TO_FRAME: ";
-    for (const auto &p : page_to_frame)
-        std::cout << p.first << "->" << p.second << " ";
-    std::cout << std::endl;
-    std::cout << "FRAME_TO_PAGE: ";
-    for (const auto &p : frame_to_page)
-        std::cout << p.first << "->" << p.second << " ";
-    std::cout << std::endl;
 }

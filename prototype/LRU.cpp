@@ -1,5 +1,4 @@
 #include "LRU.h"
-#include <iostream>
 #include <climits>
 
 LRU::LRU(std::vector<int> r, int p_c, int f_c) : Strategy(r, p_c, f_c) {

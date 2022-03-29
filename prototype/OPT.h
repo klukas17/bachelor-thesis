@@ -2,6 +2,8 @@
 
 class OPT : public Strategy {
     public:
+        int current_request;
+
         OPT(std::vector<int> r, int p_c, int f_c);
         ~OPT();
 
