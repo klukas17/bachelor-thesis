@@ -4,6 +4,7 @@
 #include "Strategy.h"
 #include "FIFO.h"
 #include "OPT.h"
+#include "LFU.h"
 #include "LRU.h"
 #include "CLOCK.h"
 
@@ -61,16 +62,17 @@ int main()
     std::cout << requests.size() << std::endl;
 
     Strategy* s1 = new FIFO(requests, PAGE_COUNT, FRAME_COUNT);
-    Strategy* s2 = new LRU(requests, PAGE_COUNT, FRAME_COUNT);
-    Strategy* s3 = new CLOCK(requests, PAGE_COUNT, FRAME_COUNT);
-    Strategy* s4 = new OPT(requests, PAGE_COUNT, FRAME_COUNT);
+    Strategy* s2 = new LFU(requests, PAGE_COUNT, FRAME_COUNT);
+    Strategy* s3 = new LRU(requests, PAGE_COUNT, FRAME_COUNT);
+    Strategy* s4 = new CLOCK(requests, PAGE_COUNT, FRAME_COUNT);
+    Strategy* s5 = new OPT(requests, PAGE_COUNT, FRAME_COUNT);
     /*
     std::cout << "FIFO" << std::endl;
     std::cout << "-------------------------------" << std::endl;
     s1->simulate();
     std::cout << "-------------------------------" << std::endl;
     */
-    std::cout << "LRU" << std::endl;
+    std::cout << "LFU" << std::endl;
     std::cout << "-------------------------------" << std::endl;
     s2->simulate();
     std::cout << "-------------------------------" << std::endl;
@@ -88,7 +90,8 @@ int main()
     */
 
     std::cout << s1->requests.size() << " " << s1->hits << " " << s1->misses << " " << s1->page_count << " " << s1->frame_count << std::endl;
-    std::cout << s2->requests.size() << " " << s2->hits << " " << s2->misses << " " << s1->page_count << " " << s1->frame_count << std::endl;
-    std::cout << s3->requests.size() << " " << s3->hits << " " << s3->misses << " " << s1->page_count << " " << s1->frame_count << std::endl;
-    std::cout << s4->requests.size() << " " << s4->hits << " " << s4->misses << " " << s1->page_count << " " << s1->frame_count << std::endl;
+    std::cout << s2->requests.size() << " " << s2->hits << " " << s2->misses << " " << s2->page_count << " " << s2->frame_count << std::endl;
+    std::cout << s3->requests.size() << " " << s3->hits << " " << s3->misses << " " << s3->page_count << " " << s3->frame_count << std::endl;
+    std::cout << s4->requests.size() << " " << s4->hits << " " << s4->misses << " " << s4->page_count << " " << s4->frame_count << std::endl;
+    std::cout << s5->requests.size() << " " << s5->hits << " " << s5->misses << " " << s5->page_count << " " << s5->frame_count << std::endl;
 }
