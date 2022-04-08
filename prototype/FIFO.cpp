@@ -31,12 +31,14 @@ void FIFO::allocate(int page_request) {
                 first_free_frame = -1;
         }
         else {
+            // ********************************
             int frame = FIFO_queue.front();
             FIFO_queue.pop();
+            FIFO_queue.push(frame);
+            // ********************************
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;
-            FIFO_queue.push(frame);
         }
     }
 }

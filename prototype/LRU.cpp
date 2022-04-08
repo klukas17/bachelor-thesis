@@ -41,6 +41,7 @@ void LRU::allocate(int page_request) {
         }
         else {
             int frame = -1;
+            // ********************************
             int accessed = INT_MAX;
             for (int i = 0; i < frame_count; i++) {
                 if (frame_last_time_accessed[i] < accessed) {
@@ -48,10 +49,11 @@ void LRU::allocate(int page_request) {
                     accessed = frame_last_time_accessed[i];
                 }
             }
+            frame_last_time_accessed[frame] = request_index;
+            // ********************************
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;
-            frame_last_time_accessed[frame] = request_index;
         }
     }
     request_index++;

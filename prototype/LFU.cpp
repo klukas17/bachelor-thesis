@@ -11,7 +11,7 @@ LFU::~LFU() {}
 
 void LFU::simulate() {
     for (int r : requests)
-        this->allocate(r);
+        allocate(r);
 }
 
 void LFU::allocate(int page_request) {
@@ -37,6 +37,7 @@ void LFU::allocate(int page_request) {
         }
         else {
             int frame = -1;
+            // ********************************
             int accessed = INT_MAX;
             for (auto &p : frame_to_page) {
                 if (page_access_count[p.second] < accessed) {
@@ -44,6 +45,7 @@ void LFU::allocate(int page_request) {
                     accessed = page_access_count[p.second];
                 }
             }
+            // ********************************
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;

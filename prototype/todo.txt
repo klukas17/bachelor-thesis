@@ -1,5 +1,0 @@
-implementacija klasičnih strategija izbacivanja stranica
-
-konstrukcija gramatike
-
-proces evolucije

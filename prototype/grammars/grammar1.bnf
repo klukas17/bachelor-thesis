@@ -1,0 +1,46 @@
+<block> ::= <statement> <block> 
+          | ''
+
+<statement> ::= 'if' '(' <expression> ')' '{' <block> '}' else '{' <block> '}'
+              | 'if' '(' <expression> ')' '{' <block> '}'
+              | 'iterations = 0;' 'while' '(' <expression> ' && iterations < max_while_loop_iterations' ')' '{' <block> 'iterations++;' '}'
+              | <modifiable> '=' <term> ';'
+              | 'write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
+
+<expression> ::= <term>
+               | <term> '==' <term>
+               | <term> '!=' <term>
+               | <term> '>' <term>
+               | <term> '<' <term>
+               | <term> '+' <term>
+               | <term> '-' <term>
+               | <term> '*' <term>
+               | 'division' '(' <term> ',' <term> ')'
+               | 'remainder' '(' <term> ',' <term> ')'
+
+<term> ::= <modifiable>
+         | <non_modifiable>
+         | <expression>
+
+<modifiable> ::= 'frame'
+               | 'num1'
+               | 'num2'
+               | 'num3'
+
+<non_modifiable> ::= 'time'
+                   | 'cache_size'
+                   | 'find_min' '(' <info_field_index> ')'
+                   | 'find_max' '(' <info_field_index> ')'
+                   | 'read' '(' <info_field_index> ',' <term> ')'
+                   | <number>
+                   | <bool>
+
+<bool> ::= 'true'
+         | 'false'
+
+<number> ::= <digit> <digit>
+           | <digit>
+
+<digit> ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+
+<info_field_index> ::= '1' | '2'

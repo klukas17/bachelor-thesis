@@ -93,4 +93,6 @@ int main()
     s5->simulate();
     std::cout << "-------------------------------" << std::endl;
     std::cout << s5->requests.size() << " " << s5->hits << " " << s5->misses << " " << s5->page_count << " " << s5->frame_count << std::endl;
+
+    //GeneratedStrategies::test();
 }

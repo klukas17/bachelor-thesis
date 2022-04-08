@@ -39,6 +39,7 @@ void CLOCK::allocate(int page_request) {
         }
         else {
             int frame = -1;
+            // ********************************
             while (frame == -1) {
                 if (info[curr] == false) {
                     frame = curr;
@@ -49,10 +50,11 @@ void CLOCK::allocate(int page_request) {
                     curr %= frame_count;
                 }
             }
+            info[frame] = true;
+            // ********************************
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;
-            info[frame] = true;
         }
     }
 }
