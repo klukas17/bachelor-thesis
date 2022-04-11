@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include "SymbolType.h"
+
 class Symbol
 {
     public:
@@ -7,10 +10,7 @@ class Symbol
         SymbolType type;
         std::string value;
 
-        Symbol(SymbolType type, std::string value){
-            this->type = type;
-            this->value = value;
-        }
-        Symbol(){}
-        ~Symbol(){}
+        Symbol(SymbolType t, std::string v);
+        Symbol();
+        ~Symbol();
 };

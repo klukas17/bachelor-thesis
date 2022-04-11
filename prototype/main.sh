@@ -1,17 +1,32 @@
 #!/bin/bash
 
-if [ ! $# -eq 4 ]
+#################### INICIJALIZACIJA VARIJABLI ####################
+
+PAGE_COUNT=1000
+FRAME_COUNT=500
+POPULATION_SIZE=50
+ITERATION_COUNT=100
+CODON_COUNT=50
+
+#################### STVARANJE NASUMIČNE POČETNE GENERACIJE ####################
+
+if [ -d "solutions" ]
 then
-    echo "Four arguments required!"
-    exit 1
+    rm -r "solutions"
 fi
+mkdir solutions
 
-PAGE_COUNT=$1
-FRAME_COUNT=$2
-POPULATION_SIZE=$3
-ITERATION_COUNT=$4
+g++ -c Unit.cpp
+g++ -c init.cpp
+g++ Unit.o init.o -o init
+./init $POPULATION_SIZE $CODON_COUNT
 
-g++ -std=c++17 -Wall -Wextra -g -c *.cpp
-g++ -std=c++17 -Wall -Wextra -g *.o -o main
-./main $PAGE_COUNT $FRAME_COUNT $POPULATION_SIZE
-rm *.o main
+#################### DEKODIRANJE POČETNE GENERACIJE ####################
+
+g++ -c GrammaticalEvolution.cpp
+g++ -c Symbol.cpp
+g++ -c Node.cpp
+g++ -c Grammar.cpp
+g++ -c decode.cpp
+g++ GrammaticalEvolution.o Symbol.o Node.o Grammar.o Unit.o decode.o -o decode
+./decode $POPULATION_SIZE $CODON_COUNT

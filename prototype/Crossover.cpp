@@ -3,6 +3,9 @@
 #include "Crossover.h"
 #include <iostream>
 
+Crossover::Crossover() {}
+Crossover::~Crossover() {}
+
 Unit* Crossover::perform(Unit* unit1, Unit* unit2) {
     if (unit1->codon_count != unit2->codon_count) {
         std::cerr << "Unmatching units in crossover!" << std::endl;

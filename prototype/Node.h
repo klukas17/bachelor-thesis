@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Symbol.h"
+#include <stdlib.h>
 
 class Node
 {
@@ -8,10 +9,6 @@ class Node
         Symbol symbol;
         Node* next;
 
-        Node(Symbol symbol)
-        {
-            this->symbol = symbol;
-            this->next = NULL;
-        }
-        ~Node(){}
+        Node(Symbol s);
+        ~Node();
 };

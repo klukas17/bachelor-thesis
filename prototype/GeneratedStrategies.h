@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "GEStrategy.h"
 
 namespace GeneratedStrategies {
