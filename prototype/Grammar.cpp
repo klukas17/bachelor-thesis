@@ -141,8 +141,10 @@ Grammar::Grammar(std::string grammar_path)
                         productions[left_side_symbol] = right_sides;
                     right_sides.clear();
                 }
-                else
-                {
+                else if (c == '\n') {
+                    continue;
+                }
+                else {
                     state = GrammarParsingState::right_side;
                 }
                 break;

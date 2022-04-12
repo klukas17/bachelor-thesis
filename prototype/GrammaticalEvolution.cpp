@@ -17,15 +17,12 @@
 #include "Grammar.h"
 
 const int CODON_COUNT = 50;
-const int POPULATION_SIZE = 20;
 const int MAX_NUMBER_OF_WRAPPING = 5;
 const std::string grammar_path = "grammars/gram04.bnf";
 
-GrammaticalEvolution::GrammaticalEvolution() {
+GrammaticalEvolution::GrammaticalEvolution(std::string grammar_path, int m_n_o_w) {
     grammar = new Grammar(grammar_path);
-    for (int i = 0; i < POPULATION_SIZE; i++) {
-        this->population.push_back(new Unit(CODON_COUNT));
-    }
+    max_number_of_wrapping = m_n_o_w;
 }
 
 GrammaticalEvolution::~GrammaticalEvolution() {}
@@ -38,20 +35,15 @@ std::string GrammaticalEvolution::decode(Unit* unit) {
     int wrap_count = 0;
     int curr_codon = 0;
 
-    //print_sequence(curr);
-    //std::cout << std::endl;
-
-    while (curr)
-    {
-        if (curr->symbol.type == SymbolType::terminal)
-        {
+    while (curr) {
+        if (curr->symbol.type == SymbolType::terminal) {
             prev = curr;
             curr = curr->next;
             continue;
         }
 
-        if (!(*grammar).productions.count(curr->symbol.value))
-        {
+        if (!(*grammar).productions.count(curr->symbol.value)) {
+            std::cout << "Incompatible symbol: " << curr->symbol.value << std::endl;
             exit(1);
         }
 
@@ -62,15 +54,12 @@ std::string GrammaticalEvolution::decode(Unit* unit) {
         Node* first = NULL;
         Node* last = NULL;
                 
-        for (auto p : chosen_production)
-        {
-            if (!first)
-            {
+        for (auto p : chosen_production) {
+            if (!first) {
                 first = new Node(Symbol(p.second, p.first));
                 last = first;
             }
-            else
-            {
+            else {
                 Node* new_node = new Node(Symbol(p.second, p.first));
                 last->next = new_node;
                 last = new_node;
@@ -81,7 +70,7 @@ std::string GrammaticalEvolution::decode(Unit* unit) {
             if (prev)
                 prev->next = curr->next;
             else
-                        HEAD = curr->next;
+                HEAD = curr->next;
 
             auto tmp = curr->next;
             (*curr).~Node();
@@ -100,16 +89,13 @@ std::string GrammaticalEvolution::decode(Unit* unit) {
             curr = first;
         }
 
-        //print_sequence(HEAD);
-        //std::cout << std::endl;
-
         curr_codon++;
         if (curr_codon == CODON_COUNT)
         {
             curr_codon = 0;
             wrap_count++;
             if (wrap_count > MAX_NUMBER_OF_WRAPPING)
-                exit(1);
+                return "";
         }
     }
 
@@ -121,8 +107,7 @@ std::string GrammaticalEvolution::decode(Unit* unit) {
         p = r;
     }
 
-    std::string ret_val;
-    ss >> ret_val;
+    std::string ret_val = ss.str();
 
     return ret_val;
 }

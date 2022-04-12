@@ -1,12 +1,13 @@
 #pragma once
 
 #include <stdlib.h>
+#include <vector>
 
 class Unit
 {
     public:
 
-        unsigned char* genome;
+        std::vector<unsigned char> genome;
         int codon_count;
 
         Unit(int codon_count);

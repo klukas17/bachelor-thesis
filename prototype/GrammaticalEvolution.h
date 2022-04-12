@@ -21,8 +21,10 @@ class GrammaticalEvolution
 
         std::vector<Unit*> population;
         Grammar* grammar;
+        std::string grammar_path;
+        int max_number_of_wrapping;
 
-        GrammaticalEvolution();
+        GrammaticalEvolution(std::string grammar_path, int m_n_o_w);
         ~GrammaticalEvolution();
 
         std::string decode(Unit* unit);

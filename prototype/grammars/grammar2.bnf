@@ -3,9 +3,9 @@
 
 <statement> ::= 'if' '(' <expression> ')' '{' <block> '}' else '{' <block> '}'
               | 'if' '(' <expression> ')' '{' <block> '}'
-              | 'iterations = 0;' 'while' '(' <expression> ' && iterations < max_while_loop_iterations' ')' '{' <block> 'iterations++;' '}'
+              | 'iterations = 0;' 'while' '(' <expression> ' && iterations < s->max_while_loop_iterations' ')' '{' <block> 'iterations++;' '}'
               | <modifiable> '=' <term> ';'
-              | 'write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
+              | 's->write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
 
 <expression> ::= <term>
                | <term> '==' <term>
@@ -15,30 +15,33 @@
                | <term> '+' <term>
                | <term> '-' <term>
                | <term> '*' <term>
-               | 'division' '(' <term> ',' <term> ')'
-               | 'remainder' '(' <term> ',' <term> ')'
+               | 's->division' '(' <term> ',' <term> ')'
+               | 's->remainder' '(' <term> ',' <term> ')'
 
 <term> ::= <modifiable>
          | <non_modifiable>
          | <expression>
 
-<modifiable> ::= 'num1'
-               | 'num2'
-               | 'num3'
+<modifiable> ::= 's->num1'
+               | 's->num2'
+               | 's->num3'
 
-<non_modifiable> ::= 'time'
-                   | 'cache_size'
-                   | 'find_min' '(' <info_field_index> ')'
-                   | 'find_max' '(' <info_field_index> ')'
-                   | 'read' '(' <info_field_index> ',' <term> ')'
+<non_modifiable> ::= 's->time'
+                   | 's->cache_size'
+                   | 's->find_min' '(' <info_field_index> ')'
+                   | 's->find_max' '(' <info_field_index> ')'
+                   | 's->read' '(' <info_field_index> ',' <term> ')'
                    | <number>
                    | <bool>
 
 <bool> ::= 'true'
          | 'false'
 
-<number> ::= <digit> <digit>
-           | <digit>
+<number> ::= <first_digit> <tail_digits> | '0'
+
+<first_digit> ::= '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+
+<tail_digits> ::= <digit> <tail_digits> | '' 
 
 <digit> ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
 
