@@ -9,7 +9,7 @@ GEStrategy::GEStrategy(std::vector<int> r, int p_c, int f_c, int s_i, int c_s) :
     num2 = 0;
     num3 = 0;
     time = 0;
-    max_while_loop_iterations = 10000;
+    max_while_loop_iterations = 1000;
     for (int i = 0; i < frame_count; i++) {
         info1[i] = 0;
         info2[i] = 0;

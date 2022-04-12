@@ -4,4 +4,4 @@ decode.cpp čita solutions/ i zapisuje rezultat u GeneratedStrategies.h
 
 run.cpp pokreće strategije i zapisuje rezultate u results/
 
-crossover_and_mutation.cpp čita results/, stvara novu generaciju, i zapisuje ju u solutions/
+evolution.cpp čita results/, stvara novu generaciju, i zapisuje ju u solutions/

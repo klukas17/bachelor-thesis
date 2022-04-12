@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
         Unit* unit2 = new Unit(codon_count);
 
         std::stringstream ss;
-        ss << i + 1;
+        ss << i;
         
         std::string file_name; 
         file_name += "solutions/";
