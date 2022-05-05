@@ -1,10 +1,19 @@
 <block> ::= <statement> <block> 
           | ''
 
+<block_low> ::= <statement_low> <block_low>
+              | ''
+
 <statement> ::= 'if' '(' <expression> ')' '{' <block> '}' else '{' <block> '}'
               | 'if' '(' <expression> ')' '{' <block> '}'
+              | 'iterations = 0;' 'while' '(' <expression> ' && iterations < s->frame_count' ')' '{' <block_low> 'iterations++;' '}'
               | <modifiable> '=' <term> ';'
               | 's->write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
+
+<statement_low> ::= 'if' '(' <expression> ')' '{' <block_low> '}' else '{' <block_low> '}'
+                  | 'if' '(' <expression> ')' '{' <block_low> '}'
+                  | <modifiable> '=' <term> ';'
+                  | 's->write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
 
 <expression> ::= <term>
                | <term> '==' <term>
