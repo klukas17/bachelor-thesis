@@ -9,7 +9,7 @@ GEStrategy::GEStrategy(std::vector<int> r, int p_c, int f_c, int s_i, int c_s) :
     num2 = 0;
     num3 = 0;
     time = 0;
-    max_while_loop_iterations = 1000;
+    page_request = -1;
     for (int i = 0; i < frame_count; i++) {
         info1[i] = 0;
         info2[i] = 0;
@@ -70,6 +70,7 @@ int GEStrategy::read(int field, int index) {
 }
 
 void GEStrategy::allocate(int page_request) {
+    this->page_request = page_request;
     if (page_to_frame[page_request] != -1) {
         hits++;
     }
@@ -91,11 +92,11 @@ void GEStrategy::allocate(int page_request) {
                 first_free_frame = -1;
         }
         else {
-            int frame = GeneratedStrategies::function_1(this);
+            int frame = GeneratedStrategies::function(this);
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;
         }
     }
-    GeneratedStrategies::function_2(this);
+    page_access_count[page_request]++;
 }

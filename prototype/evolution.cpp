@@ -15,15 +15,13 @@ class Container {
         int value;
         float coef;
         int index;
-        Unit* unit1;
-        Unit* unit2;
+        Unit* unit;
 
-        Container(int v, int c, int i, Unit* u1, Unit* u2) {
+        Container(int v, int c, int i, Unit* u) {
             value = v;
             coef = c;
             index = i;
-            unit1 = u1;
-            unit2 = u2;
+            unit = u;
         }
 };
 
@@ -34,6 +32,7 @@ int main(int argc, char* argv[]) {
     int population_count = std::stoi(argv[1]);
     int codon_count = std::stoi(argv[2]);
     float mutation_rate = 1 / (float) std::stoi(argv[3]);
+    int elitism_count = std::stoi(argv[4]);
 
     Crossover* crossover = new Crossover();
     Mutation* mutation = new Mutation(mutation_rate);
@@ -51,26 +50,21 @@ int main(int argc, char* argv[]) {
         file_name += ss.str();
         file_name += ".txt";
 
-        Unit* unit1 = new Unit(codon_count);
-        Unit* unit2 = new Unit(codon_count);
+        Unit* unit = new Unit(codon_count);
 
         std::ifstream input(file_name);
         std::string line;
 
-        std::vector<unsigned char> v1, v2;
+        std::vector<unsigned char> v;
 
         std::istringstream iss;
         std::string s;
 
         getline(input, line);
         iss = std::istringstream(line);
-        while (getline(iss, s, ' ')) v1.push_back(std::stoi(s));
-        getline(input, line);
-        iss = std::istringstream(line);
-        while (getline(iss, s, ' ')) v2.push_back(std::stoi(s));
+        while (getline(iss, s, ' ')) v.push_back(std::stoi(s));
 
-        unit1->genome = v1;
-        unit2->genome = v2;
+        unit->genome = v;
 
         ss.str("");
         file_name = "";
@@ -86,14 +80,14 @@ int main(int argc, char* argv[]) {
         getline(in, line);
         result = std::stoi(line);
 
-        Container* t = new Container(result, 0, i, unit1, unit2);
+        Container* t = new Container(result, 0, i, unit);
 
         units.push_back(t);
     }
 
     std::sort(units.begin(), units.end(), 
     [](Container* a, Container* b) {
-        if (a->value != b->value) return a->value < b->value;
+        if (a->value != b->value) return a->value > b->value;
         else return a->index < b->index;
     });
 
@@ -101,7 +95,10 @@ int main(int argc, char* argv[]) {
     max = units[0]->value;
     min = units.rbegin()[0]->value;
 
-    std::cout << "\t" << "Biggest fitness: " << max << std::endl;
+    //std::cout << "MIN: " << min << "\t\tMAX: " << max << std::endl;
+
+    for (auto i : units) std::cout << i->value << " ";
+    std::cout << std::endl;
 
     float range = 0;
 
@@ -125,12 +122,22 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    std::vector<std::pair<Unit*, Unit*>> pairs;
+    //std::cerr << "CURR GEN:" << std::endl;
+    for (int i = 0; i < units.size(); i++) {
+        //std::cerr << i + 1 << ":\t\t";
+        for (int j = 0; j < units[i]->unit->codon_count; j++) {
+            //std::cout << (unsigned int) units[i]->unit->genome[j] << " ";
+        }
+        //std::cerr << std::endl;
+    }
 
-    pairs.push_back({units[0]->unit1, units[0]->unit2});
-    pairs.push_back({units[1]->unit1, units[1]->unit2});
+    std::vector<Unit*> new_units;
+    for (int i = 0; i < elitism_count; i++) {
+        new_units.push_back(units[i]->unit);
+        //std::cout << "ELITISM: " << i << " " << units[i]->value << std::endl;
+    }
 
-    while (pairs.size() < population_count) {
+    while (new_units.size() < population_count) {
         float r1, r2;
 
         r1 = (rand() / (float) RAND_MAX) * range;
@@ -141,19 +148,25 @@ int main(int argc, char* argv[]) {
         while (r1 > units[i1]->coef) i1++;
         while (r2 > units[i2]->coef) i2++;
 
-        Unit* u1 = crossover->perform(units[i1]->unit1, units[i2]->unit1);
-        Unit* u2 = crossover->perform(units[i1]->unit2, units[i2]->unit2);
+        Unit* u = crossover->perform(units[i1]->unit, units[i2]->unit);
 
-        u1 = mutation->perform(u1);
-        u2 = mutation->perform(u2);
+        u = mutation->perform(u);
 
-        pairs.push_back({u1, u2});
+        new_units.push_back(u);
     }
 
-    for (int i = 0; i < pairs.size(); i++) {
+    //std::cerr << "NEXT GEN:" << std::endl;
+    for (int i = 0; i < new_units.size(); i++) {
+        //std::cerr << i + 1 << ":\t\t";
+        for (int j = 0; j < new_units[i]->codon_count; j++) {
+            //std::cerr << (unsigned int) new_units[i]->genome[j] << " ";
+        }
+        //std::cerr << std::endl;
+    }
 
-        Unit* unit1 = pairs[i].first;
-        Unit* unit2 = pairs[i].second;
+    for (int i = 0; i < new_units.size(); i++) {
+
+        Unit* unit = new_units[i];
 
         std::stringstream ss;
         ss << i;
@@ -163,14 +176,14 @@ int main(int argc, char* argv[]) {
         file_name += ss.str();
         file_name += ".txt";
 
-        std::remove(file_name.c_str());
+        //std::cout << file_name << std::endl;
+
+        //std::remove(file_name.c_str());
         
         std::ofstream f;
         f.open(file_name);
 
-        for (int i = 0; i < codon_count; i++) f << (int) unit1->genome[i] << " ";
-        f << std::endl;
-        for (int i = 0; i < codon_count; i++) f << (int) unit2->genome[i] << " ";
+        for (int i = 0; i < codon_count; i++) f << (int) unit->genome[i] << " ";
         f << std::endl;
         f.close();
     }

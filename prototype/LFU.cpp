@@ -53,5 +53,4 @@ void LFU::allocate(int page_request) {
 
     }
     page_access_count[page_request]++;
-
 }

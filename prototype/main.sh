@@ -3,18 +3,28 @@
 #################### INICIJALIZACIJA VARIJABLI ####################
 
 PAGE_COUNT=1000
-FRAME_COUNT=100
+FRAME_COUNT=200
 POPULATION_SIZE=100
-ITERATION_COUNT=100
-CODON_COUNT=50
-MAX_NUMBER_OF_WRAPPING=5
+ITERATION_COUNT=1000
+CODON_COUNT=20
+MAX_NUMBER_OF_WRAPPING=2
+ELITISM_COUNT=10
 REQUESTS="requests/zahtjevi_treniranje.txt"
-MUTATION_RATE=1000
+MUTATION_RATE=100
 
 GENERATION=1
 
-while [ $GENERATION -lt $((${ITERATION_COUNT} + 1)) ]
+echo "Compiling code..."
+g++ -c Unit.cpp Crossover.cpp Mutation.cpp GrammaticalEvolution.cpp Symbol.cpp Node.cpp Grammar.cpp Strategy.cpp
+g++ -c init.cpp decode.cpp evolution.cpp
+g++ Unit.o init.o -o init
+g++ GrammaticalEvolution.o Symbol.o Node.o Grammar.o Unit.o decode.o -o decode
+g++ evolution.o Unit.o Crossover.o Mutation.o -o evolution
+echo "Compiling done!"
+
+while [ $GENERATION -le ${ITERATION_COUNT} ]
 do
+    #read -p "Press enter to continue..."
     if [ $GENERATION -eq 1 ]
     then
 
@@ -26,27 +36,15 @@ do
         fi
         mkdir "solutions"
 
-        g++ -c Unit.cpp
-        g++ -c init.cpp
-        g++ Unit.o init.o -o init
         ./init $POPULATION_SIZE $CODON_COUNT
     else
 
         #################### STVARANJE NOVE GENERACIJE ####################
-        g++ -c evolution.cpp Crossover.cpp Mutation.cpp Unit.cpp
-        g++ evolution.o Unit.o Crossover.o Mutation.o -o evolution
-        ./evolution $POPULATION_SIZE $CODON_COUNT $MUTATION_RATE
+        ./evolution $POPULATION_SIZE $CODON_COUNT $MUTATION_RATE $ELITISM_COUNT
     fi
 
 
     #################### DEKODIRANJE TRENUTNE GENERACIJE ####################
-
-    g++ -c GrammaticalEvolution.cpp
-    g++ -c Symbol.cpp
-    g++ -c Node.cpp
-    g++ -c Grammar.cpp
-    g++ -c decode.cpp
-    g++ GrammaticalEvolution.o Symbol.o Node.o Grammar.o Unit.o decode.o -o decode
 
     if [ -f "GeneratedStrategies.h" ]
     then 
@@ -60,7 +58,7 @@ do
     echo "" >> GeneratedStrategies.h
     echo "namespace GeneratedStrategies {" >> GeneratedStrategies.h
     ./decode $POPULATION_SIZE $CODON_COUNT $MAX_NUMBER_OF_WRAPPING >> GeneratedStrategies.h
-    echo "int function_1(GEStrategy* s) {" >> GeneratedStrategies.h
+    echo "int function(GEStrategy* s) {" >> GeneratedStrategies.h
     echo "  switch(s->strategy_index) {" >> GeneratedStrategies.h
     for i in $(seq ${POPULATION_SIZE})
     do
@@ -68,14 +66,6 @@ do
     done
     echo "  }" >> GeneratedStrategies.h
     echo "  return 0;" >> GeneratedStrategies.h
-    echo "}" >> GeneratedStrategies.h
-    echo "void function_2(GEStrategy* s) {" >> GeneratedStrategies.h
-    echo "  switch(s->strategy_index) {" >> GeneratedStrategies.h
-    for i in $(seq ${POPULATION_SIZE})
-    do
-        echo "      case $((${i} - 1)): g$((${i} - 1))(s); break;" >> GeneratedStrategies.h
-    done
-    echo "  }" >> GeneratedStrategies.h
     echo "}" >> GeneratedStrategies.h
     echo "}" >> GeneratedStrategies.h
 
@@ -89,9 +79,10 @@ do
     fi
     mkdir "results"
 
-    g++ -c Strategy.cpp GEStrategy.cpp run.cpp
+    g++ -c GEStrategy.cpp run.cpp
     g++ Strategy.o GEStrategy.o run.o -o run
     ./run $POPULATION_SIZE $REQUESTS $PAGE_COUNT $FRAME_COUNT
 
     GENERATION=$((${GENERATION} + 1))
+
 done

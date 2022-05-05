@@ -15,6 +15,7 @@
 #include "Symbol.h"
 #include "Node.h"
 #include "Grammar.h"
+#include "DecodeException.h"
 
 const int CODON_COUNT = 50;
 const int MAX_NUMBER_OF_WRAPPING = 5;
@@ -95,7 +96,7 @@ std::string GrammaticalEvolution::decode(Unit* unit) {
             curr_codon = 0;
             wrap_count++;
             if (wrap_count > MAX_NUMBER_OF_WRAPPING)
-                return "";
+                throw DecodeException();
         }
     }
 

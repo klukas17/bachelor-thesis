@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <set>
 
 #include "Strategy.h"
 #include "GEStrategy.h"
@@ -24,6 +25,16 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    std::set<int> blacklisted;
+    std::ifstream blacklisted_file("solutions/blacklisted.txt");
+    std::string l;
+    std::vector<int> vec;
+    std::istringstream iss;
+    std::string s;
+    getline(blacklisted_file, l);
+    iss = std::istringstream(l);
+    while (getline(iss, s, ' ')) blacklisted.insert(std::stoi(s));
+
     for (int i = 0; i < population_count; i++) {
         std::stringstream ss;
         ss << i;
@@ -36,13 +47,21 @@ int main(int argc, char* argv[]) {
         std::ofstream f;
         f.open(file_name);
 
-        Strategy* s = new GEStrategy(requests, page_count, frame_count, i, frame_count);
-        s->simulate();
+        int hits;
 
-        f << s->hits << std::endl;
+        if (blacklisted.find(i) == blacklisted.end()) {
+            Strategy* s = new GEStrategy(requests, page_count, frame_count, i, frame_count);
+            s->simulate();
+            f << s->hits << std::endl;
+            hits = s->hits;
+        }
+        else {
+            f << 0 << std::endl;
+            hits = 0;
+        }
 
         f.close();
 
-        std::cout << "\t" << i + 1 << "/" << population_count << std::endl;
+        std::cout << "\t" << i + 1 << "/" << population_count << "\t\t\t" << hits << std::endl;
     }
 }

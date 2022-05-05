@@ -21,12 +21,14 @@
          | <non_modifiable>
          | <expression>
 
-<modifiable> ::= 's->num1'
+<modifiable> ::= 'frame'
+               | 's->num1'
                | 's->num2'
                | 's->num3'
 
 <non_modifiable> ::= 's->time'
                    | 's->cache_size'
+                   | 's->page_request'
                    | 's->find_min' '(' <info_field_index> ')'
                    | 's->find_max' '(' <info_field_index> ')'
                    | 's->read' '(' <info_field_index> ',' <term> ')'

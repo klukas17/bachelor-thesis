@@ -8,11 +8,12 @@ class GEStrategy : public Strategy {
         int num1;
         int num2;
         int num3;
-        int max_while_loop_iterations;
         int time;
+        int page_request;
         int cache_size;
         std::map<int, int> info1;
         std::map<int, int> info2;
+        std::map<int, int> page_access_count;
 
         GEStrategy(std::vector<int> r, int p_c, int f_c, int s_i, int c_s);
         ~GEStrategy();

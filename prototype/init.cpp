@@ -13,8 +13,7 @@ int main(int argc, char* argv[]) {
     int codon_count = std::stoi(argv[2]);
 
     for (int i = 0; i < population_count; i++) {
-        Unit* unit1 = new Unit(codon_count);
-        Unit* unit2 = new Unit(codon_count);
+        Unit* unit = new Unit(codon_count);
 
         std::stringstream ss;
         ss << i;
@@ -27,9 +26,7 @@ int main(int argc, char* argv[]) {
         std::ofstream f;
         f.open(file_name);
 
-        for (int i = 0; i < codon_count; i++) f << (int) unit1->genome[i] << " ";
-        f << std::endl;
-        for (int i = 0; i < codon_count; i++) f << (int) unit2->genome[i] << " ";
+        for (int i = 0; i < codon_count; i++) f << (int) unit->genome[i] << " ";
         f << std::endl;
         f.close();
     }
