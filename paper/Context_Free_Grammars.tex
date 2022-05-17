@@ -12,7 +12,7 @@ A formal grammar is a 4-tuple $G = (V, T, P, S)$ \citep{sipser2013introduction} 
 	\item $S$ is a start nonterminal symbol.
 \end{list}
 
-We can think of the terminal $T$ and nonterminal $V$ symbols as the building blocks of a grammar. Productions $P$ define the rules by which these building blocks substitute each other in the process of building a string. This string belongs to the language which is defined by the grammar. The start symbol $S$ represents the starting building block. The process of building a string starts by applying a production over the start symbol, and this process of applying productions over <međunizovi> continues until no more productions can be applied. At that point, the result string is built, and it consists only of elements of the $T$ set, which belong to the alphabet of the language.
+We can think of the terminal $T$ and nonterminal $V$ symbols as the building blocks of a grammar. Productions $P$ define the rules by which these building blocks substitute each other in the process of building a string. This string belongs to the language which is defined by the grammar. The start symbol $S$ represents the starting building block. The process of building a string starts by applying a production over the start symbol, and this process of applying productions over intermediate strings continues until no more productions can be applied. At that point, the result string is built, and it consists only of elements of the $T$ set, which belong to the alphabet of the language.
 
 The most general grammars, defined only with the aforementioned rules and with no other restrictions, are also called unrestricted grammars. For example, we can define one unrestricted grammar like $G = (\{A, B, C\}, \{a, b, c, d\}, P, A)$ where $P$ contains productions such as:
 \begin{list}{$\bullet$}{}  	
@@ -30,6 +30,6 @@ Context-free grammars are a subset of unrestricted grammars which impose one res
 	\item $C \rightarrow abba$
 \end{list}
 
-Context-free grammars get their name from their property that every nonterminal symbol $A$ from $V$ can be substituted with a string of terminals and nonterminals $S$ if there exists a production rule in $P$ such that $A \rightarrow S$, no matter it's surrounding context in the <međuniz>.
+Context-free grammars get their name from their property that every nonterminal symbol $A$ from $V$ can be substituted with a string of terminals and nonterminals $S$ if there exists a production rule in $P$ such that $A \rightarrow S$, no matter it's surrounding context in the intermediate string.
 
 Context-free grammars have played a central role in the compiler technology \citep{hopcroft2007automatatheory}. They are used to define syntax rules of a language, as they are expressive enough to allow recursions and other concepts we expect from programming languages, yet they are simple enough to be parsed effectively.
