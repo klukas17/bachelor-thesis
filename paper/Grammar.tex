@@ -1,1 +1,137 @@
-\section{Grammar}
+\section{Grammar for evolving cache replacement policies}
+Before listing and describing all the productions of our grammar, first we will go through some of the nonterminal symbols, the building blocks of our strategies. It is also important to note that the implementation of this software system was written in the C++ language, so the grammar was written in a way that satisfies the C++ language rules. The architecure of the built software system is described in detail in Appendix A.
+
+Each strategy will keep track of some information about frames and pages, and this information will be available when choosing a frame in which the requested page will be stored. Each strategy will have four of these information arrays.
+
+The first array is called last\_accessed and it keeps track of when each frame was last accessed. We will also introduce functions last\_accessed\_min and last\_accessed\_max which will return the index of the frame which was accessed least recently and most recently, respectively.
+
+The second array is called page\_access\_count and it keeps track of how many times each page was requested. We will introduce functions page\_access\_count\_min and page\_access\_count\_max which will return the index of the page that was accessed the least number of times and the most number of times, respectively.
+
+The third array is called added\_to\_cache and it keeps track of when each page was added to cache. We will introduce functions added\_to\_cache\_min and added\_to\_cache\_max which will return the index of the page that was added to cache least recently and most recently, respectively.
+
+Finally, the fourth array is called accessed. The first function that manages this array is called get\_accessed. It takes one argument, the frame index, and returns the information stored about this frame. The second function is calles set\_accessed. It takes two arguments, the first being the index of the frame, and the second being some value, and it stores that value at the index of the frame in the accessed array. Each time a frame is accessed, it's value is set to one. This array was introduced to make implementation of the CLOCK strategy possible, as will be explained in subchapter 3.3.
+
+The start symbol is ${<}block{>}$ and it corresponds to zero or more simpler statements, which are encapsulated in the ${<}statement{>}$ symbol. Each statement corresponds to a programming construct like a loop or a simple one line statement.
+
+During the process of writing and fine-tuning the grammar, one of the problems was the possibility of loops occuring inside loops. This would drastically slow down the process of choosing a frame, which is a decision that should be made relatively quickly. To solve this problem, we will introduce the ${<}block\_no\_loop{>}$ and ${<}statement\_no\_loop{>}$ symbols. These symbols are semantically equivalent to ${<}block{>}$ and ${<}statement{>}$, except they won't be able to contains loops, and by introducing these symbols we will ensure that loops can't be nested.
+
+Symbols ${<}expression{>}$ and ${<}term{>}$ will be used to generate simple expressions. The ${<}modifiable{>}$ symbol	 will agregate all terms which can go on the left and the right side of the equality operator '=', while the ${<}non\_modifiable{>}$ symbol will aggregate all terms which can go only on the right side of the equality operator.
+
+Symbols ${<}bool{>}$ and ${<}number{>}$ will be used to generate constants.
+
+The productions for the symbol ${<}block{>}$ look as follows:
+
+\noindent
+$ {<}block{>}\:::=\:{<}statement{>}\:{<}block{>}$\\
+$ \indent\indent |\:""$
+
+The first production allows recursive chaining of statements. The second production allows breaking the chaining, and without it, we would be stuck generating infinite statements one after another.
+
+Similarly, productions for the ${<}block\_no\_loop{>}$ symbol are:
+
+\noindent
+$ {<}block\_no\_loop{>}\:::=\:{<}statement\_no\_loop{>}\:{<}block\_no\_loop{>}$\\
+$ \indent\indent |\:""$
+
+Productions for the ${<}statement{>}$ symbol are:
+
+\noindent
+$ {<}statement{>}\:::=\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block{>}\:\text{\}}\:\text{else}\:\text{\{}\:{<}block{>}\:\text{\}} $\\
+$ \indent\indent |\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block{>}\:\text{\}}$\\
+$ \indent\indent |\:\text{iterations = 0;}\:\text{while}\:\text{(}\:{<}expression{>}\:\text{\&\& iterations < frame\_count}\:\text{)}\:\text{\{}\:\\{<}block\_no\_loop{>}\:\text{iterations++;}\:\text{\}} $\\
+$ \indent\indent |\:{<}modifiable{>}\:\text{=}\:{<}term{>}\:\text{;} $\\
+$ \indent\indent |\:\text{write}\:\text{(}\:{<}info\_field\_index{>}\:\text{,}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)}\:\text{;} $\\
+$ \indent\indent |\:\text{set\_accessed}\:\text{(}\:{<}term{>}\text{,}{<}term{>}\:\text{)}$
+
+The first production generates simple if-else branches, while the second production generates if branches without the else part. The third production generates loops. Loops are written as while loops, which initialize the counter variable iterations to zero, and then the loop is executed while some expression is evaluated as true and the iteration count is smaller than the number of frames in the cache. After each iteration, the iterations variable is increased by one. The fourth production generates instructions with equality operator. Finally, the fifth production generates calls of the 'write' function. Each strategy has two distinct arrays in which they can store informations about each frame. The write function takes three arguments, the first being the index of the array, the second being the index (or the frame number) in that array, and the third being the value that is being written at that index in that array.
+
+Similarly, productions for the ${<}statement\_no\_loop{>}$ symbol are:
+
+\noindent
+$ {<}statement\_no\_loop{>}\:::=\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block{>}\:\text{\}}\:\text{else}\:\text{\{}\:{<}block{>}\:\text{\}} $\\
+$ \indent\indent |\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block{>}\:\text{\}}$\\
+$ \indent\indent |\:{<}modifiable{>}\:\text{=}\:{<}term{>}\:\text{;} $\\
+$ \indent\indent |\:\text{write}\:\text{(}\:{<}info\_field\_index{>}\:\text{,}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)}\:\text{;} $
+$ \indent\indent |\:\text{set\_accessed}\:\text{(}\:{<}term{>}\text{,}{<}term{>}\:\text{)}$
+
+Productions for the ${<}expression{>}$ symbol are:
+
+\noindent
+$ {<}expression{>}\:::=\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{==}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{!=}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{>}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{>=}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{<}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{<=}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{+}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{-}\:{<}term{>} $\\
+$ \indent\indent |\:{<}term{>}\:\text{*}\:{<}term{>} $\\
+$ \indent\indent |\:\text{division}\:\text{(}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)} $\\
+$ \indent\indent |\:\text{remainder}\:\text{(}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)} $
+
+All of these productions generate simple arithmetic expressions. The division and remainder operators are written as functions, rather than just operators, because we will encapsulate these operations into functions that safely handle division by zero.
+
+Productions for the ${<}term{>}$ symbol are:
+
+\noindent
+$ {<}term{>}\:::=\:{<}modifiable{>} $\\
+$ \indent\indent |\:{<}non\_modifiable{>} $\\
+$ \indent\indent |\:{<}expression{>} $
+
+The ${<}term{>}$ symbol occurs inside expressions and it generates modifiable variables (which can be on the left and the right side of the equality operator), non-modifiable variables (which can only be on the right side of the equality operator), constants and nested expressions.
+
+Productions for the ${<}modifiable{>}$ symbol are:
+
+\noindent
+$ {<}modifiable{>}\:::=\:\text{frame} $\\
+$ \indent\indent |\:\text{num1} $\\
+$ \indent\indent |\:\text{num2} $\\
+$ \indent\indent |\:\text{num3} $
+
+We have already established that our strategies will only evolve the line 7 in the Algorithm 2, that being the decision in which frame should we put the page that isn't currently in the cache if all the frames are taken. For the sake of convenience, we will model this with functions that initialize the frame variable to zero and return that frame variable. The frame variable corresponds to the index of the chosen frame. We will want our strategies to modify this variable from it's initial value of zero, and that's why this variable will be modifiable. We will also give each strategy three free variables which they can change however they please, and these variables are called num1, num2 and num3.
+
+Productions for the ${<}non\_modifiable{>}$ symbol are:
+
+\noindent
+$ {<}non\_modifiable{>}\:::=\:\text{time} $\\
+$ \indent\indent |\:\text{cache\_size} $\\
+$ \indent\indent |\:\text{page\_request} $\\
+$ \indent\indent |\:\text{find\_min}\:\text{(}\:{<}info\_field\_index{>}\:\text{)} $\\
+$ \indent\indent |\:\text{find\_max}\:\text{(}\:{<}info\_field\_index{>}\:\text{)} $\\
+$ \indent\indent |\:\text{read}\:\text{(}\:{<}info\_field\_index{>}\:\text{,}\:{<}term{>}\:\text{)} $\\
+$ \indent\indent |\:\text{page\_access\_count\_min}\:\text{(}\:\text{)}$\\
+$ \indent\indent |\:\text{page\_access\_count\_max}\:\text{(}\:\text{)}$\\
+$ \indent\indent |\:\text{last\_accessed\_min}\:\text{(}\:\text{)}$\\
+$ \indent\indent |\:\text{last\_accessed\_max}\:\text{(}\:\text{)}$\\
+$ \indent\indent |\:\text{added\_to\_cache\_min}\:\text{(}\:\text{)}$\\
+$ \indent\indent |\:\text{added\_to\_cache\_max}\:\text{(}\:\text{)}$\\
+$ \indent\indent |\:\text{get\_accessed}\:\text{(}\:{<}term{>}\:\text{)}$\\
+$ \indent\indent |\:{<}number{>} $\\
+$ \indent\indent |\:{<}bool{>} $
+
+The variable time refers to the index of the current request, and it gets increased by one for each new request. The variable cache\_size refers to the number of frames in the cache, and the page\_request variable refers to the page index of the page that is currently being requested. Function find\_min takes one input argument, which is the index of strategy's arrays (and it can be one or two since each strategy has two info arrays), and it returns the index at which this array has the minimal vaue. The function find\_max works in a similar way, except it returns the index at which the array has the maximal value. Function read takes two arguments, the first being the array index for this strategy, and the second being the index in that array, and this function reads the value in that array at that index and returns it.
+
+Productions for the ${<}bool{>}$ symbol are:
+
+\noindent
+$ {<}bool{>}\:::=\:\text{true} $\\
+$ \indent\indent |\:\text{false} $
+
+This symbol generates elementary Boolean logic constants, true and false.
+
+Productions for the ${<}info\_field\_index{>}$ symbol are:
+
+\noindent
+$ {<}info\_field\_index{>}\:::=\:\text{1} $\\
+$ \indent\indent |\:\text{2} $
+
+As it was explained previously, each strategy has two info arrays in which they can store arbitrary information about each frame. Addressing these info arrays is done using this symbol.
+
+Finally, the symbols for generating integer constants are ${<}number{>}$, ${<}first\_digit{>}$, ${<}tail\_digits{>}$ and ${<}digit{>}$. Productions for generating numbers are recursive, and they can't start with the digit zero (unless the number is zero), since we want these numbers to be written in the decimal base, and if a number starts with 0 in the C++ language, it is interpreted as an octal number. Productions for these symbols are:
+
+\noindent
+$ {<}number{>}\:::=\:{<}first\_digit{>}\:{<}tail\_digits{>}\:|\:\text{0} $\\
+$ {<}first\_digit{>}\:::=\:\text{1}\:|\:\text{2}\:|\:\text{3}\:|\:\text{4}\:|\:\text{5}\:|\:\text{6}\:|\:\text{7}\:|\:\text{8}\:|\:\text{9} $\\
+$ {<}tail\_digits{>}\:::=\:{<}digit{>}\:{<}tail\_digits{>}\:|\:"" $\\
+$ {<}digit{>}\:::=\:\text{0}\:|\:\text{1}\:|\:\text{2}\:|\:\text{3}\:|\:\text{4}\:|\:\text{5}\:|\:\text{6}\:|\:\text{7}\:|\:\text{8}\:|\:\text{9} $

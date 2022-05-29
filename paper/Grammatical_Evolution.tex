@@ -19,8 +19,6 @@ Grammatical evolution has some drawbacks, namely low locality and high redundanc
 
 To demonstrate the process of genotype-phenotype mapping in the grammatical evolution, we will define a context-free grammar and one individual's genotype, and then show a step by step mapping from genotype to phenotype. Instead of defining a grammar using the $(V, T, P, S)$ 4-tuple, we will define it using the BNF notation. Terminal symbols are written as lowercase symbols, nonterminal symbols are written as uppercase symbols surrounded by symbols '<' and '>', and the first nonterminal symbol is the start symbol. Production heads are on the left side of the '::=' string, and on the right side of this string are bodies of productions which share their left side, separated by the symbol '|'. We will define our grammar as:
 
-%$ {<}S{>}\:::=\:a\:{<}A{>}\:b\:{<}S{>} $\\
-%$ \null\qquad\quad|\:{<}C{>}\:d\:{<}A{>}\:$
 \noindent
 $ {<}S{>}\:::=\:a\:{<}A{>}\:b\:{<}S{>}\:|\:{<}C{>}\:d\:{<}A{>}\:$\\
 $ {<}A{>}\:::=\:c\:{<}B{>}\:{<}A{>}\:c\:|\:a\:b\:{<}C{>}\:|\:d $\\
@@ -54,4 +52,4 @@ Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:{<}C{>}$, the index v
 
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:{<}C{>}$, the index value is $i = 10$. Since our codon array has only 10 elements, index $i = 10$ is out of bounds, but the mapping process is incomplete, so we apply the wrapping operator and set $i = 0$. The codon value is $176$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $176\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
-Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:a$. Since there are no more nonterminal symbols in this string, the mapping process is finished, and this string is the final result.
+Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:a$. Since there are no more nonterminal symbols in this string, the mapping process is finished, and this string is the final result of the mapping.

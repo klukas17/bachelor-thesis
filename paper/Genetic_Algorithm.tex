@@ -16,6 +16,7 @@ The basic idea flow of a genetic algorithm is described as \citep{eiben2015evolu
 \State $\indent \text{mutate acquired } \textit{children} \text{;}$
 \State $\indent \text{evaluate } \textit{children} \text{;}$
 \State $\indent \text{select individuals for next generation;}$
+\State $\text{end while}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -33,4 +34,4 @@ In line 6, we apply the mutation operator on newly constructed individuals, whic
 
 In line 7, we evalute newly construced individuals. These individuals are being evaluated with the same fitness function used in line 2.
 
-In line 8, we choose which individuals carry on to the next generation. Unlike the parent selection, which is stochastic, this process is usually deterministic. Two common strategies are choosing the best individuals from both parents and offspring, and the age-biased approach, which chooses only from the offspring \citep{eiben2015evolutionarycomputing}. If we choose the latter approach, a problem we might encounter is loosing good solutions, if these good solutions have no children better than themselves. To counter this problem, we can choose to carry over a few of the best solutions into the next generation without changing them, and this approach is called elitism.
+In line 8, we choose which individuals carry on to the next generation. Unlike the parent selection, which is stochastic, this process is usually deterministic. Two common strategies are choosing the best individuals from both parents and offspring, and the age-biased approach, which chooses only from the offspring \citep{eiben2015evolutionarycomputing}. If we choose the latter approach, a problem we might encounter is loosing good solutions, if these good solutions have no children better than themselves. To counter this problem, we can choose to carry over a few of the best solutions into the next generation without changing them, and this approach is called elitism\citep{cupic2019evolucijskoracunarstvo}.

@@ -264,14 +264,14 @@
 		\let\footnoterule\relax
 	
 		\begin{center}
-			{\large\sffamily SVEU\v{C}ILI\v{S}TE U ZAGREBU}
+			{\large\sffamily UNIVERSITY OF ZAGREB}
 			
-			{\large\bfseries\sffamily FAKULTET ELEKTROTEHNIKE I RA\v{C}UNARSTVA}
+			{\large\bfseries\sffamily FACULTY OF ELECTRICAL ENGINEERING AND COMPUTING}
 		\end{center}
 		\vfill
 		\begin{center}%
 	    	\if@radzavrsni%
-			  {\large\sffamily ZAVR\v{S}NI RAD br.~\@thesisnumber \par}%
+			  {\large\sffamily BACHELOR THESIS ASSIGNMENT No.~\@thesisnumber \par}%
 			\else \if@raddiplomski%
 			  {\large\sffamily DIPLOMSKI RAD br.~\@thesisnumber \par}%
 			\else {\large\sffamily\bfseries SEMINAR \par}%
@@ -295,9 +295,7 @@
 		\begin{center}
 			{\sffamily\large Zagreb, 
 			\ifcase\month\or
-				sije\v{c}anj\or velja\v{c}a\or o\v{z}ujak\or travanj\or svibanj\or
-	   	 		lipanj\or srpanj\or kolovoz\or rujan\or listopad\or studeni\or
-	    			prosinac\fi \space \number\year.%
+				January\or February\or March\or April\or May\or June\or July\or August\or September\or October\or November\or December\fi \space \number\year%
 	    	}
 		\end{center}
 	\end{titlepage}%
