@@ -69,6 +69,38 @@ int GEStrategy::read(int field, int index) {
     return 0;
 }
 
+int GEStrategy::page_access_count_min() {
+
+}
+
+int GEStrategy::page_access_count_max() {
+    
+}
+
+int GEStrategy::last_accessed_min() {
+
+}
+
+int GEStrategy::last_accessed_max() {
+    
+}
+
+int GEStrategy::added_to_cache_min() {
+
+}
+
+int GEStrategy::added_to_cache_max() {
+    
+}
+
+int GEStrategy::get_accessed(int frame) {
+
+}
+
+void GEStrategy::set_accessed(int frame, int value) {
+
+}
+
 void GEStrategy::allocate(int page_request) {
     this->page_request = page_request;
     if (page_to_frame[page_request] != -1) {
@@ -79,6 +111,7 @@ void GEStrategy::allocate(int page_request) {
         if (first_free_frame != -1) {
             frame_to_page[first_free_frame] = page_request;
             page_to_frame[page_request] = first_free_frame;
+            added_to_cache[page_request] = time;
 
             bool found = false;
             for (int i = first_free_frame; i < frame_count; i++) {
@@ -96,7 +129,10 @@ void GEStrategy::allocate(int page_request) {
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;
+            added_to_cache[page_request] = time;
         }
     }
     page_access_count[page_request]++;
+    last_accessed[page_to_frame[page_request]] = time;
+    accessed[page_to_frame[page_request]] = 1;
 }

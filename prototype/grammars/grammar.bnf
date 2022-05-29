@@ -1,19 +1,21 @@
 <block> ::= <statement> <block> 
           | ''
 
-<block_low> ::= <statement_low> <block_low>
+<block_no_loop> ::= <statement_no_loop> <block_no_loop>
               | ''
 
 <statement> ::= 'if' '(' <expression> ')' '{' <block> '}' else '{' <block> '}'
               | 'if' '(' <expression> ')' '{' <block> '}'
-              | 'iterations = 0;' 'while' '(' <expression> ' && iterations < s->frame_count' ')' '{' <block_low> 'iterations++;' '}'
+              | 'iterations = 0;' 'while' '(' <expression> ' && iterations < s->frame_count' ')' '{' <block_no_loop> 'iterations++;' '}'
               | <modifiable> '=' <term> ';'
               | 's->write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
+              | 's->set_accessed' '(' <term> ',' <term> ')' ';'
 
-<statement_low> ::= 'if' '(' <expression> ')' '{' <block_low> '}' else '{' <block_low> '}'
+<statement_no_loop> ::= 'if' '(' <expression> ')' '{' <block_low> '}' else '{' <block_low> '}'
                   | 'if' '(' <expression> ')' '{' <block_low> '}'
                   | <modifiable> '=' <term> ';'
                   | 's->write' '(' <info_field_index> ',' <term> ',' <term> ')' ';'
+                  | 's->set_accessed' '(' <term> ',' <term> ')' ';'
 
 <expression> ::= <term>
                | <term> '==' <term>
@@ -41,6 +43,14 @@
                    | 's->find_min' '(' <info_field_index> ')'
                    | 's->find_max' '(' <info_field_index> ')'
                    | 's->read' '(' <info_field_index> ',' <term> ')'
+                   | 's->page_access_count_min' '(' ')'
+                   | 's->page_access_count_max' '(' ')'
+                   | 's->last_accessed_min' '(' ')'
+                   | 's->last_accessed_max' '(' ')'
+                   | 's->added_to_cache_min' '(' ')'
+                   | 's->added_to_cache_max' '(' ')'
+                   | 's->get_accessed' '(' <term> ')'
+                   | 's->page_access_count_min' '(' ')'
                    | <number>
                    | <bool>
 

@@ -14,6 +14,9 @@ class GEStrategy : public Strategy {
         std::map<int, int> info1;
         std::map<int, int> info2;
         std::map<int, int> page_access_count;
+        std::map<int, int> last_accessed;
+        std::map<int, int> added_to_cache;
+        std::map<int, int> accessed;
 
         GEStrategy(std::vector<int> r, int p_c, int f_c, int s_i, int c_s);
         ~GEStrategy();
@@ -23,6 +26,14 @@ class GEStrategy : public Strategy {
 
         int find_min(int index);
         int find_max(int index);
+        int page_access_count_min();
+        int page_access_count_max();
+        int last_accessed_min();
+        int last_accessed_max();
+        int added_to_cache_min();
+        int added_to_cache_max();
+        int get_accessed(int frame);
+        void set_accessed(int frame, int value);
         int division(int a, int b);
         int remainder(int a, int b);
         void write(int field, int index, int value);
