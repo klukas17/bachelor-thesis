@@ -21,7 +21,9 @@
                | <term> '==' <term>
                | <term> '!=' <term>
                | <term> '>' <term>
+               | <term> '>=' <term>
                | <term> '<' <term>
+               | <term> '<=' <term>
                | <term> '+' <term>
                | <term> '-' <term>
                | <term> '*' <term>

@@ -1,16 +1,19 @@
 \section{Cache replacement policies}
+\subsection{Problem definition}
 Paging is a memory management scheme that breaks up physical memory into fixed-size blocks called frames, and breaks up logical memory into same size blocks called pages \citep{silberschatz2018operatingsystem}. Physical memory refers to the real memory the operating system works with, and the logical memory refers to the memory space of each program being executed on the machine. Before a process is executed, it's pages are loaded into some frames.
 
 Since the sum of logical spaces of all the programs being executed can exceed the physical space, sometimes a page must be kicked out of a frame, in order to make room for another page. This process is called swapping. The central question here is: which page should be kicked out? There are several strategies for this problem, and they are called cache replacement policies.
 
+\subsection{Popular heuristic strategies}
 The FIFO (First In, First Out) strategy organizes the cache as a standard queue. The pages are kicked out in the order in which they were added.
 
-The LRU (Least Recently Used) strategy kicks out the page which wasn't used for the longest time in the past. This strategy relies on the locality of reference, which means that if a page was recently accessed, it is likely that it will be accessed again in the near future.
+The LRU (Least Recently Used) strategy kicks out the page which wasn't used for the longest time in the past. This strategy relies on the principle of the locality of reference, which means that if a page was recently accessed, it is likely that it will be accessed again in the near future.
 
-The LFU (Least Frequently Used) strategy kicks out the page which was accessed the least number of times in some period of time.
+The LFU (Least Frequently Used) strategy kicks out the page which was accessed the least number of times.
 
 The CLOCK strategy, also called the second chance strategy, traverses the frames in a round robin way. Each frame has a flag which can either have the value zero or one. When a page needs to be kicked out, the algorithm starts iterating over the frames, going to the first one once it reaches the end. If the current frame has the value of it's flag equal to zero, it's page is kicked out and the search is finished. If, on the other hand, it's flag is equal to one, the flag is set to zero, and the algorithm continues to the next frame, hence the 'second chance' name.
 
+\subsection{Cache replacement policy pseudocode}
 The general cache replacement policy looks as follows:
 
 \begin{algorithm}[]
@@ -35,8 +38,8 @@ Lines 2 and 3 correspond to the situation where the currently required page is a
 
 Lines 4 and 5 correspond to the situation where the requested page isn't in the cache, but there exists an empty frame. In that case, we put the requested page in that empty frame.
 
-Finally, lines 7, 8 and 9 correspond to the situation where teh requested page isn't in the cache, and all the frames already have some other page in them. In that case, first we must decide from which frame we will remove a page (line 7). Finally, we swap the old page from that frame with the requested page (lines 8 and 9).
+Finally, lines 7, 8 and 9 correspond to the situation where he requested page isn't in the cache, and all the frames already have some other page in them. In that case, first we must decide from which frame we will remove a page (line 7). Finally, we swap the old page from that frame with the requested page (lines 8 and 9).
 
-An important note here is that all the cache replacement policies vary only in the line 7, that being the decision which frame will host the requested page. All other parts of the algorithm are equal in all strategies. 
+An important note here is that all the cache replacement policies vary only in the line 7, that being the decision which frame will host the requested page. All other parts of the algorithm are equal in all of the strategies. 
 
 When evolving cache replacement policies, we only change the line 7. Since the topic of this thesis is evolving these policies using grammatical evolution, the first step in this process is defining a grammar. This is a crucial step and the next subchapter will describe the constructed grammar in detail.
