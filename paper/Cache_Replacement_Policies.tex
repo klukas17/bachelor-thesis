@@ -1,17 +1,17 @@
 \section{Cache replacement policies}
 \subsection{Problem definition}
-Paging is a memory management scheme that breaks up physical memory into fixed-size blocks called frames, and breaks up logical memory into same size blocks called pages \citep{silberschatz2018operatingsystem}. Physical memory refers to the real memory the operating system works with, and the logical memory refers to the memory space of each program being executed on the machine. Before a process is executed, it's pages are loaded into some frames.
+Paging is a memory management scheme that breaks up physical memory into fixed-size blocks called frames, and breaks up logical memory into same size blocks called pages \citep{silberschatz2018operatingsystem}. Physical memory refers to the real memory the operating system works with, and the logical memory refers to the memory space of each program being executed on the machine. Before a process is executed, its pages are loaded into some frames.
 
-Since the sum of logical spaces of all the programs being executed can exceed the physical space, sometimes a page must be kicked out of a frame, in order to make room for another page. This process is called swapping. The central question here is: which page should be kicked out? There are several strategies for this problem, and they are called cache replacement policies.
+Since the sum of logical spaces of all the programs being executed can exceed the physical space, sometimes a page must be removed from a frame, in order to make room for another page. This process is called swapping. The central question here is: which page should be removed? There are several strategies for this problem, and they are called cache replacement policies.
 
 \subsection{Popular heuristic strategies}
-The FIFO (First In, First Out) strategy organizes the cache as a standard queue. The pages are kicked out in the order in which they were added.
+The FIFO (First In, First Out) strategy organizes the cache as a standard queue. The pages are removed in the order in which they were added.
 
-The LRU (Least Recently Used) strategy kicks out the page which wasn't used for the longest time in the past. This strategy relies on the principle of the locality of reference, which means that if a page was recently accessed, it is likely that it will be accessed again in the near future.
+The LRU (Least Recently Used) strategy removes the page which wasn't used for the longest time in the past. This strategy relies on the principle of the locality of reference, which means that if a page was recently accessed, it is likely that it will be accessed again in the near future.
 
-The LFU (Least Frequently Used) strategy kicks out the page which was accessed the least number of times.
+The LFU (Least Frequently Used) strategy removes the page which was accessed the least number of times.
 
-The CLOCK strategy, also called the second chance strategy, traverses the frames in a round robin way. Each frame has a flag which can either have the value zero or one. When a page needs to be kicked out, the algorithm starts iterating over the frames, going to the first one once it reaches the end. If the current frame has the value of it's flag equal to zero, it's page is kicked out and the search is finished. If, on the other hand, it's flag is equal to one, the flag is set to zero, and the algorithm continues to the next frame, hence the 'second chance' name.
+The CLOCK strategy, also called the second chance strategy, traverses the frames in a round robin way. Each frame has an access flag which can either have the value zero or one. When a page needs to be removed, the algorithm starts iterating over the frames, going to the first one once it reaches the end. If the current frame has the value of its flag equal to zero, its page is removed and the search is finished. If, on the other hand, its flag is equal to one, the flag is set to zero, and the algorithm continues to the next frame, hence the 'second chance' name.
 
 \subsection{Cache replacement policy pseudocode}
 The general cache replacement policy looks as follows:

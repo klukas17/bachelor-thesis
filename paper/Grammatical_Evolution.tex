@@ -1,6 +1,6 @@
 \section{Grammatical evolution}
 \subsection{Definition}
-Grammatical evolution is a evolutionary computation technique used to evolve computer programs which have a high fitness in regards to a fitness function, or in other words, which do some certain task well. The phenotypes of the individuals are executable computer programs. The genotypes of the individuals are arrays of 8-bit numbers, called codons. The genotype-phenotype mapping is done using a context-free grammar which generates the language of the desired solutions.
+Grammatical evolution is a evolutionary computation technique used to evolve computer programs which have a high fitness in regards to a fitness function, or in other words, which do some certain task well. The phenotypes of the individuals are executable computer programs. The genotypes of the individuals are arrays of 8-bit numbers, called codons. Authors of the algorithm have propposed using 8-bit codons in \citep{neill2003grammaticalevolution}. They've also ran some experiments with 12-bit codons and 16-bit codons, and the results have shown that increasing the codon size can result in slower evolutionary search. The genotype-phenotype mapping is done using a context-free grammar which generates the language of the desired solutions.
 
 The process of the genotype-phenotype mapping works as follows: we start at the first codon in individual's genotpye, and we traverse the parsing tree using depth-first search, until we find a nonterminal symbol. Once we find a nonterminal symbol, we check all productions of our specified grammar in which this nonterminal symbol is the left side (head). We calculate which production to apply on this nonterminal symbol using the formula
 $$Production\:=\:(Codon\:integer\:value)$$
@@ -34,26 +34,100 @@ $$ [\:176,\:49,\:168,\:253,\:8,\:65,\:127,\:26,\:130,\:100\:] $$
 
 All the intermediate strings will be displayed like linear strings, which can be constructed by traversing the parsing tree in depth.
 
+Each step of the mapping process will be followed by a figure showing the current state of the process visually. On the top of all figures is the unit's genotype shown as a array. All the fields in this array are colored ih blue, except for the one which the index used in mapping at this turn points to, as this field is colored in yellow. Beneath the genotype array will be the parsing tree built up to that point. The nonterminal symbol which will be expanded at this turn is colored in red. The nonterminal symbols which have already been expanded are colored in green, and the nonterminal symbols which haven't yet been expanded and won't be at this turn, but sometime later in the future are colored in orange. Finally, the leaves of the tree, which are the terminal symbols, are colored in brown. These figures were built using the tool \citep{diagrams}.
+
 The mapping process starts with the string ${<}S{>}$, and the index $i = 0$ in the genotype array. Since $i = 0$, the codon value we will use at this step is $176$. The first nonterminal symbol in the string is ${<}S{>}$, and it has $2$ productions defined in the grammar. So we calculate $176\:\:MOD\:\:2\:=\:0$, and apply the production at index $0$, which is ${<}S{>}\:::=\:a\:{<}A{>}\:b\:{<}S{>}$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_01.png}
+	\caption{Genotype-phenotype mapping, step 1}
+\end{figure}
 
 Our current string is $a\:{<}A{>}\:b\:{<}S{>}$, the index value is $i = 1$, and the codon value is $49$. The leftmost nonterminal symbol is ${<}A{>}$, which has $3$ productions defined. So we calculate $49\:\:MOD\:\:3\:=\:1$, and apply the production at index $1$, which is ${<}A{>}\:::=\:a\:b\:{<}C{>}$
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_02.png}
+	\caption{Genotype-phenotype mapping, step 2}
+\end{figure}
+
 Our current string is $a\:a\:b\:{<}C{>}\:b\:{<}S{>}$, the index value is $i = 2$, and the codon value is $168$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $168\:\:MOD\:\:3\:=\:0$, and apply the production at index $0$, which is ${<}C{>}\:::=\:c\:{<}C{>}$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_03.png}
+	\caption{Genotype-phenotype mapping, step 3}
+\end{figure}
 
 Our current string is $a\:a\:b\:c\:{<}C{>}\:b\:{<}S{>}$, the index value is $i = 3$, and the codon value is $253$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $253\:\:MOD\:\:3\:=\:1$, and apply the production at index $1$, which is ${<}C{>}\:::=\:{<}C{>}\:d\:{<}C{>}$.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_04.png}
+	\caption{Genotype-phenotype mapping, step 4}
+\end{figure}
+
 Our current string is $a\:a\:b\:c\:{<}C{>}\:d\:{<}C{>}\:b\:{<}S{>}$, the index value is $i = 4$, and the codon value is $8$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $8\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_05.png}
+	\caption{Genotype-phenotype mapping, step 5}
+\end{figure}
 
 Our current string is $a\:a\:b\:c\:a\:d\:{<}C{>}\:b\:{<}S{>}$, the index value is $i = 5$, and the codon value is $65$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $65\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_06.png}
+	\caption{Genotype-phenotype mapping, step 6}
+\end{figure}
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:{<}S{>}$, the index value is $i = 6$, and the codon value is $127$. The leftmost nonterminal symbol is ${<}S{>}$, which has $2$ productions defined. So we calculate $127\:\:MOD\:\:2\:=\:1$, and apply the production at index $1$, which is ${<}S{>}\:::=\:{<}C{>}\:d\:{<}A{>}$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_07.png}
+	\caption{Genotype-phenotype mapping, step 7}
+\end{figure}
 
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:{<}C{>}\:d\:{<}A{>}$, the index value is $i = 7$, and the codon value is $26$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $26\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_08.png}
+	\caption{Genotype-phenotype mapping, step 8}
+\end{figure}
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:{<}A{>}$, the index value is $i = 8$, and the codon value is $130$. The leftmost nonterminal symbol is ${<}A{>}$, which has $3$ productions defined. So we calculate $130\:\:MOD\:\:3\:=\:1$, and apply the production at index $1$, which is ${<}A{>}\:::=\:a\:b\:{<}C{>}$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_09.png}
+	\caption{Genotype-phenotype mapping, step 9}
+\end{figure}
 
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:{<}C{>}$, the index value is $i = 9$, and the codon value is $100$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $100\:\:MOD\:\:3\:=\:1$, and apply the production at index $1$, which is ${<}C{>}\:::=\:c\:{<}C{>}$.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_10.png}
+	\caption{Genotype-phenotype mapping, step 10}
+\end{figure}
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:{<}C{>}$, the index value is $i = 10$. Since our codon array has only 10 elements, index $i = 10$ is out of bounds, but the mapping process is incomplete, so we apply the wrapping operator and set $i = 0$. The codon value is $176$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $176\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_11.png}
+	\caption{Genotype-phenotype mapping, step 11}
+\end{figure}
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:a$. Since there are no more nonterminal symbols in this string, the mapping process is finished, and this string is the final result of the mapping.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{parsing_tree_12.png}
+	\caption{Genotype-phenotype mapping, step 12}
+\end{figure}

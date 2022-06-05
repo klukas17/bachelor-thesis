@@ -3,8 +3,8 @@ For the purposes of writing this thesis, an implementation of the grammatical ev
 The classes written for this generic part of the implementation are:
 
 \begin{list}{$\bullet$}{}  	
-	\item \textbf{GrammaticalEvolution} - the top class in the hierarchy, used to encapsulate the process of mapping a unit's genotype onto it's phenotype
-	\item \textbf{Grammar} - the class used for reading and parsing the .bnf files, and also storing information about a grammar and it's productions 
+	\item \textbf{GrammaticalEvolution} - the top class in the hierarchy, used to encapsulate the process of mapping a unit's genotype onto its phenotype
+	\item \textbf{Grammar} - the class used for reading and parsing the .bnf files, and also storing information about a grammar and its productions 
 	\item \textbf{Crossover} - an implementation of the crossover operator
 	\item \textbf{Mutation} - an implementation of the mutation operator
 	\item \textbf{Unit} - the class used for storing information about a unit
@@ -28,7 +28,7 @@ The other part of the implementation is the classes used for the purpose of evol
 	\item \textbf{OPT} - an implementation of the OPT strategy
 \end{list}
 
-For the sake of simplicity and the adherence to the 'separation of concerns' principle, the main function was split into four files, each with it's own main function. These files are:
+For the sake of simplicity and the adherence to the 'separation of concerns' principle, the main function was split into four files, each with its own main function. These files are:
 
 \begin{list}{$\bullet$}{}  	
 	\item \textbf{init} - initializes a random population and stores each unit's genotype in a separate file inside the /solutions directory
@@ -37,4 +37,12 @@ For the sake of simplicity and the adherence to the 'separation of concerns' pri
 	\item \textbf{evolution} - reads each strategy's score and performs the evolutionary process of creating a new generation, which is then stored inside the /solutions directory
 \end{list}
 
-During each iteration of the evolutionary process, new strategies are generated and stored as C++ files, which need to be compiled before they can be run. The class responsible for decoding the genotype of each unit, which is an array of 8-bit numbers, to it's corresponding phenotype, which is a computer program, is the GrammaticalEvolution class. This class has a decode method which takes as input some Unit and returns it's phenotype representation as a string. This string needs to be carefully placed into a specific file, so that it can be correctly compiled and run. This is the responsibility of the main loop of the program. This main loop isn't written as a C++ file, instead it is a bash script. This bash script manages and calls the four files which do a specific part of the evolutionary process, recompiles the parts of the code that change during each iteration, and assures the persistency of the generated strategies between each run. Each strategy has a genotype, phenotype and score, and each of these is stored inside a different textual file.
+During each iteration of the evolutionary process, new strategies are generated and stored as C++ files, which need to be compiled before they can be run. The class responsible for decoding the genotype of each unit, which is an array of 8-bit numbers, to its corresponding phenotype, which is a computer program, is the GrammaticalEvolution class. This class has a decode method which takes as input some Unit and returns its phenotype representation as a string. This string needs to be carefully placed into a specific file, so that it can be correctly compiled and run. This is the responsibility of the main loop of the program. This main loop isn't written as a C++ file, instead it is a bash script. This bash script manages and calls the four files which do a specific part of the evolutionary process, recompiles the parts of the code that change during each iteration, and assures the persistency of the generated strategies between each run. Each strategy has a genotype, phenotype and score, and each of these is stored inside a different textual file.
+
+Figure A.1 shows a class diagram of the complete project. The classes which belong to the core part of the project and which can be applied to any problem are colored in blue. The classes which are specificly built for the problem of evolving cache replacement strategies are colored in green. These classes are shown without their member variables and functions since these are unimportant in viewing the whole project and the connections between its parts. Finally, the four C++ files which are being compiled to executable programs and subsequently run by the main bash script are colored in blue. These aren't classes so they technically don't belong in a class diagram, but they were included for the sake of showing all the built components and their connections. The diagram was built using the tool \citep{diagrams}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.55]{class_diagram.png}
+	\caption{Class diagram}
+\end{figure}
