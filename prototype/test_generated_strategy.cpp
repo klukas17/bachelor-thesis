@@ -10,6 +10,7 @@ int main(int argc, char* argv[]) {
     std::string requests_path = argv[1];
     int page_count = std::stoi(argv[2]);
     int frame_count = std::stoi(argv[3]);
+    int index = std::stoi(argv[4]);
 
     std::vector<int> requests;
     std::ifstream in(requests_path);
@@ -22,7 +23,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    Strategy* s = new GEStrategy(requests, page_count, frame_count, 0, frame_count);
+    Strategy* s = new GEStrategy(requests, page_count, frame_count, index, frame_count);
     s->simulate();
-    std::cout << "GENERATED STRATEGY: " << s->hits << std::endl;
+    std::cout << s->hits << std::endl;
 }

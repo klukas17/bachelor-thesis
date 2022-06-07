@@ -16,7 +16,7 @@ A formal grammar is a 4-tuple $G = (V, T, P, S)$ \citep{sipser2013introduction} 
 We can think of the terminal $T$ and nonterminal $V$ symbols as the building blocks of the grammar. Productions $P$ define the rules by which these building blocks substitute each other in the process of building a string. This string belongs to the language which is defined by the grammar. The start symbol $S$ represents the starting building block. The process of building a string starts by applying a production over the start symbol, and this process of applying productions over intermediate strings continues until no more productions can be applied. At that point, the result string is built, and it consists only of the elements of the $T$ set, which belong to the alphabet of the language.
 
 \subsection{Formal grammar types}
-The most general grammars, defined only by the aforementioned rules and with no other restrictions, are also called unrestricted grammars. For example, we can define one unrestricted grammar as $G = (\{A, B, C\}, \{a, b, c, d\}, P, A)$ where $P$ contains productions such as:
+The most general grammars, defined only by the aforementioned rules and with no other restrictions, are called unrestricted grammars. For example, we can define one unrestricted grammar as $G = (\{A, B, C\}, \{a, b, c, d\}, P, A)$ where $P$ contains productions such as:
 \begin{list}{$\bullet$}{}  	
 	\item $AB \rightarrow c$
 	\item $aBdC \rightarrow \epsilon$
@@ -34,4 +34,4 @@ Context-free grammars are a subset of unrestricted grammars which impose one add
 
 Context-free grammars get their name from their property that every nonterminal symbol $A$ from $V$ can be substituted with a string of terminals and nonterminals $S$ if there exists a production rule in $P$ such that $A \rightarrow S$, no matter its surrounding context in the intermediate string.
 
-Context-free grammars have played a central role in the development of the compiler technology \citep{hopcroft2007automatatheory}. They are used to define syntax rules of a language, as they are expressive enough to allow recursions, nesting and other concepts we expect from programming languages, yet they are simple enough to be parsed effectively.
+Context-free grammars have played a central role in the development of the compiler technology \citep{hopcroft2007automatatheory}. They are used to define the syntax rules of a language, as they are expressive enough to allow recursions, nesting and other concepts we expect from programming languages, yet they are simple enough to be parsed effectively.

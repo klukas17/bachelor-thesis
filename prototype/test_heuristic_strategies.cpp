@@ -27,20 +27,22 @@ int main(int argc, char* argv[]) {
     }
 
     Strategy* s1 = new FIFO(requests, page_count, frame_count);
-    Strategy* s2 = new LRU(requests, page_count, frame_count);
-    Strategy* s3 = new LFU(requests, page_count, frame_count);
-    Strategy* s4 = new CLOCK(requests, page_count, frame_count);
-    Strategy* s5 = new OPT(requests, page_count, frame_count);
-
     s1->simulate();
-    s2->simulate();
-    s3->simulate();
-    s4->simulate();
-    s5->simulate();
-
     std::cout << "FIFO: " << s1->hits << std::endl;
+
+    Strategy* s2 = new LRU(requests, page_count, frame_count);
+    s2->simulate();
     std::cout << "LRU: " << s2->hits << std::endl;
+
+    Strategy* s3 = new LFU(requests, page_count, frame_count);
+    s3->simulate();
     std::cout << "LFU: " << s3->hits << std::endl;
+
+    Strategy* s4 = new CLOCK(requests, page_count, frame_count);
+    s4->simulate();
     std::cout << "CLOCK: " << s4->hits << std::endl;
-    std::cout << "OPT: " << s5->hits << std::endl;
+
+    Strategy* s5 = new OPT(requests, page_count, frame_count);
+    s5->simulate();
+    std::cout << "OPT: " << s5->hits << std::endl;  
 }

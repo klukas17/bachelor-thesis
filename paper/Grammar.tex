@@ -1,6 +1,6 @@
 \section{Grammar for evolving cache replacement policies}
 \subsection{Introduction to the grammar design}
-Before listing and describing all the productions of our grammar, we will go through some of the nonterminal symbols, the building blocks of our strategies. It is also important to note that the implementation of this software system was written in the C++ language, so the grammar was written in a way that satisfies the C++ language rules. The architecure of the built software system is described in detail in the Appendix A.
+Before listing and describing all the productions of our grammar, we will go through some of the nonterminal symbols, the building blocks of our strategies. It is also important to note that the implementation of this software system was written in the C++ language, so the grammar was written in a way that satisfies the C++ language rules. The architecture of the built software system is described in detail in the Appendix A.
 
 \subsection{Nonterminal symbols}
 The start symbol is ${<}block{>}$ and it corresponds to zero or more simpler statements, which are encapsulated in the ${<}statement{>}$ symbol. Each statement corresponds to a programming construct like a loop or a simple one line statement.
@@ -12,7 +12,7 @@ Symbols ${<}expression{>}$ and ${<}term{>}$ will be used to generate simple expr
 Symbols ${<}bool{>}$ and ${<}number{>}$ will be used to generate constants.
 
 \subsection{Information stored by each strategy}
-Each strategy will keep track of some information about frames and pages, and this information will be available when choosing a frame in which the requested page will be stored. Each strategy will have four of these information arrays. The generated cache replacement policies will not manipulate these arrays directly, instead, each array will have some functions which are used to access it. In this sense, the function used to access the information arrays can be considered features ouf our learning problem.
+Each strategy will keep track of some information about frames and pages, and this information will be available when choosing a frame in which the requested page will be stored. Each strategy will have four of these information arrays. The generated cache replacement policies will not manipulate these arrays directly, instead, each array will have some functions which are used to access it. In this sense, the functions used to access the information arrays can be considered features of our learning problem.
 
 The first array is called $last\_accessed$ and it keeps track of when each frame was last accessed. We will also introduce functions $last\_accessed\_min$ and $last\_accessed\_max$ which will return the index of the frame which was accessed least recently and most recently, respectively.
 
@@ -20,16 +20,16 @@ The second array is called $page\_access\_count$ and it keeps track of how many 
 
 The third array is called $added\_to\_cache$ and it keeps track of when each page was added to cache. We will introduce functions $added\_to\_cache\_min$ and $added\_to\_cache\_max$ which will return the index of the frame which holds the page that was added to cache least recently and most recently, respectively.
 
-Finally, the fourth array is called $accessed$. The first function that manages this array is called $get\_accessed$. It takes one argument, the frame index, and returns the information stored about this frame. The second function is calles $set\_accessed$. It takes two arguments, the first being the index of the frame, and the second being some value, and it stores that value at the index of the frame in the accessed array. Each time a frame is accessed, its value is set to one. This array was introduced to make the implementation of the CLOCK strategy possible, as will be explained in subchapter 3.3. The unique feature of this array is that the generated strategies can change its contents, unlike the other arrays which are only changed automatically and the generated stragies can only read their contents.
+Finally, the fourth array is called $accessed$. The first function that manages this array is called $get\_accessed$. It takes one argument, the frame index, and returns the information stored about this frame. The second function is calles $set\_accessed$. It takes two arguments, the first being the index of the frame, and the second being some value, and it stores that value at the index of the frame in the accessed array. Each time a frame is accessed, its value is set to one. This array was introduced to make the implementation of the CLOCK strategy possible, as will be explained in the subchapter 3.3. The unique feature of this array is that the generated strategies can change its contents, unlike the other arrays which are only changed automatically and the generated stragies can only read their contents.
 
 Each strategy will also be given some arrays and variables which aren't updated automatically, instead, the strategy can use them to store whatever information it chooses. 
 
-Each strategy will have two of these arrays, and they are accessed using the 'read' and 'write' functions. The read function takes two arguments, the first being the index of the array, and the second being the index (the frame number) in that array, and this function reads the value in that array at that index and returns it. The write function takes three arguments, the first being the index of the array, the second being the index (the frame number) in that array, and the third being the value that is being written at that index in that array.
+Each strategy will have two of these arrays, and they are accessed using the $read$ and $write$ functions. The $read$ function takes two arguments, the first being the index of the array, and the second being the index (the frame number) in that array, and this function reads the value in that array at that index and returns it. The $write$ function takes three arguments, the first being the index of the array, the second being the index (the frame number) in that array, and the third being the value that is being written at that index in that array.
 
-Next to these two arrays, each strategy will also have three free variables which can they can change however they please, and these variables are called 'num1', 'num2' and 'num3'.
+Next to these two arrays, each strategy will also have three free variables which can they can change however they please, and these variables are called $num1$, $num2$ and $num3$.
 
 \subsection{Symbols ${<}block{>}$, ${<}block\_no\_loop{>}$}
-The productions for the symbol ${<}block{>}$ look as follows:
+Productions for the ${<}block{>}$ symbol are:
 
 \noindent
 $ {<}block{>}\:::=\:{<}statement{>}\:{<}block{>}$\\
@@ -54,7 +54,7 @@ $ \indent\indent |\:{<}modifiable{>}\:\text{=}\:{<}term{>}\:\text{;} $\\
 $ \indent\indent |\:\text{write}\:\text{(}\:{<}info\_field\_index{>}\:\text{,}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)}\:\text{;} $\\
 $ \indent\indent |\:\text{set\_accessed}\:\text{(}\:{<}term{>}\text{,}{<}term{>}\:\text{)}$
 
-The first production generates simple if-else branches, while the second production generates if branches without the else part. The third production generates loops. Loops are written as while loops, which initialize the counter variable iterations to zero, and then the loop is executed while some expression is evaluated as true and the iteration count is smaller than the number of frames in the cache. After each iteration, the iterations variable is increased by one. The fourth production generates instructions with the equality operator. Finally, the fifth production generates calls of the 'write' function. This function is explained in the subchapter 3.2.3.
+The first production generates simple if-else branches, while the second production generates if branches without the else part. The third production generates loops. Loops are written as while loops, which initialize the counter variable $iterations$ to zero, and then the loop is executed while some expression is evaluated as true and the iteration count is smaller than the number of frames in the cache. After each iteration, the $iterations$ variable is increased by one. The fourth production generates instructions with the equality operator. Finally, the fifth production generates calls of the $write$ function. This function is explained in the subchapter 3.2.3.
 
 Similarly, productions for the ${<}statement\_no\_loop{>}$ symbol are:
 
@@ -103,7 +103,7 @@ $ \indent\indent |\:\text{num1} $\\
 $ \indent\indent |\:\text{num2} $\\
 $ \indent\indent |\:\text{num3} $
 
-We have already established that our strategies will only evolve the line 7 in the Algorithm 2, that being the decision in which frame should we put the page that isn't currently in the cache if all the frames are taken. For the sake of convenience, we will model this with functions that initialize the frame variable to zero and return that frame variable. The frame variable corresponds to the index of the chosen frame. We will want our strategies to modify this variable from its initial value of zero, and that's why this variable will be modifiable. The 'num1', 'num2' and 'num3' variables are the free variables of the each strategy, and they are explained in the subchapter 3.2.3.
+We have already established that our strategies will only evolve the line 7 in the Algorithm 2, that being the decision in which frame should we put the page that isn't currently in the cache if all the frames are taken. For the sake of convenience, we will model this with functions that initialize the $frame$ variable to zero and return that $frame$ variable. The $frame$ variable corresponds to the index of the chosen frame. We will want our strategies to modify this variable from its initial value of zero, and that's why this variable will be modifiable. The $num1$, $num2$ and $num3$ variables are the free variables of the each strategy, and they are explained in the subchapter 3.2.3.
 
 \subsection{Symbol ${<}non\_modifiable{>}$}
 Productions for the ${<}non\_modifiable{>}$ symbol are:
@@ -125,7 +125,7 @@ $ \indent\indent |\:\text{get\_accessed}\:\text{(}\:{<}term{>}\:\text{)}$\\
 $ \indent\indent |\:{<}number{>} $\\
 $ \indent\indent |\:{<}bool{>} $
 
-The variable time refers to the index of the current request, and it gets increased by one for each new request. The variable cache\_size refers to the number of frames in the cache, and the page\_request variable refers to the page index of the page that is currently being requested. Function find\_min takes one input argument, which is the index of strategy's arrays (and it can be one or two since each strategy has two info arrays), and it returns the index at which this array has the minimal vaue. The function find\_max works in a similar way, except it returns the index at which the array has the maximal value. The rest of the productions are explained in the subchapters 3.2.2. and 3.2.3.
+The variable $time$ refers to the index of the current request, and it gets increased by one for each new request. The variable $cache\_size$ refers to the number of frames in the cache, and the $page\_request$ variable refers to the page index of the page that is currently being requested. Function $find\_min$ takes one input argument, which is the index of strategy's arrays (and it can be one or two since each strategy has two info arrays), and it returns the index at which this array has the minimal vaue. The function $find\_max$ works in a similar way, except it returns the index at which the array has the maximal value. The rest of the productions are explained in the subchapters 3.2.2. and 3.2.3.
 
 \subsection{Symbol ${<}bool{>}$}
 Productions for the ${<}bool{>}$ symbol are:

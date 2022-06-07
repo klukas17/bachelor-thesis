@@ -1,4 +1,5 @@
 #include "OPT.h"
+#include "iostream"
 
 OPT::OPT(std::vector<int> r, int p_c, int f_c) : Strategy(r, p_c, f_c) {
     current_request = 0;
