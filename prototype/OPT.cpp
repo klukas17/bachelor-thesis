@@ -36,6 +36,7 @@ void OPT::allocate(int page_request) {
         else {
 
             int frame = -1;
+            // ********************************
             int found_count = 0;
             int curr = current_request + 1;
             int frame_to_kick = -1;
@@ -70,7 +71,7 @@ void OPT::allocate(int page_request) {
                     }
                 }
             }
-
+            // ********************************
             page_to_frame[frame_to_page[frame]] = -1;
             frame_to_page[frame] = page_request;
             page_to_frame[page_request] = frame;

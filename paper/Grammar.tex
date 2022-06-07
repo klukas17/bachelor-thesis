@@ -59,8 +59,8 @@ The first production generates simple if-else branches, while the second product
 Similarly, productions for the ${<}statement\_no\_loop{>}$ symbol are:
 
 \noindent
-$ {<}statement\_no\_loop{>}\:::=\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block{>}\:\text{\}}\:\text{else}\:\text{\{}\:{<}block{>}\:\text{\}} $\\
-$ \indent\indent |\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block{>}\:\text{\}}$\\
+$ {<}statement\_no\_loop{>}\:::=\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block\_no\_loop{>}\:\text{\}}\:\text{else}\:\text{\{}\:{<}block\_no\_loop{>}\:\text{\}} $\\
+$ \indent\indent |\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:{<}block\_no\_loop{>}\:\text{\}}$\\
 $ \indent\indent |\:{<}modifiable{>}\:\text{=}\:{<}term{>}\:\text{;} $\\
 $ \indent\indent |\:\text{write}\:\text{(}\:{<}info\_field\_index{>}\:\text{,}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)}\:\text{;} $\\
 $ \indent\indent |\:\text{set\_accessed}\:\text{(}\:{<}term{>}\text{,}{<}term{>}\:\text{)}$

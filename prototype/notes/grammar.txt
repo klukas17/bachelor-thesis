@@ -1,1 +1,0 @@
-| 'iterations = 0;' 'while' '(' <expression> ' && iterations < s->max_while_loop_iterations' ')' '{' <block> 'iterations++;' '}'

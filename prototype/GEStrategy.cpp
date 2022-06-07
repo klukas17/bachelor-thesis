@@ -31,8 +31,10 @@ int GEStrategy::find_min(int index) {
     int ret = -1;
     int val = INT_MAX;
     for (auto &pair : m)
-        if (pair.second < val)
+        if (pair.second < val) {
             ret = pair.first;
+            val = pair.second;
+        }
     return ret;
 }
 
@@ -43,8 +45,10 @@ int GEStrategy::find_max(int index) {
     int ret = -1;
     int val = INT_MIN;
     for (auto &pair : m)
-        if (pair.second > val)
+        if (pair.second > val) {
             ret = pair.first;
+            val = pair.second;
+        }
     return ret;
 }
 
@@ -59,46 +63,88 @@ int GEStrategy::remainder(int a, int b) {
 }
 
 void GEStrategy::write(int field, int index, int value) {
-    if (field == 1 && index > 0 && index < cache_size) info1[index] = value;
-    if (field == 2 && index > 0 && index < cache_size) info2[index] = value;
+    if (field == 1 && index >= 0 && index < cache_size) info1[index] = value;
+    if (field == 2 && index >= 0 && index < cache_size) info2[index] = value;
 }
 
 int GEStrategy::read(int field, int index) {
-    if (field == 1 && index > 0 && index < cache_size) return info1[index];
-    if (field == 2 && index > 0 && index < cache_size) return info2[index];
+    if (field == 1 && index >= 0 && index < cache_size) return info1[index];
+    if (field == 2 && index >= 0 && index < cache_size) return info2[index];
     return 0;
 }
 
 int GEStrategy::page_access_count_min() {
-
+    int ret = -1;
+    int val = INT_MAX;
+    for (int i = 0; i < frame_count; i++)
+        if (page_access_count[frame_to_page[i]] < val) {
+            val = page_access_count[frame_to_page[i]];
+            ret = i;
+        }
+    return ret;
 }
 
 int GEStrategy::page_access_count_max() {
-    
+    int ret = -1;
+    int val = INT_MIN;
+    for (int i = 0; i < frame_count; i++)
+        if (page_access_count[frame_to_page[i]] > val) {
+            val = page_access_count[frame_to_page[i]];
+            ret = i;
+        }
+    return ret;
 }
 
 int GEStrategy::last_accessed_min() {
-
+    int ret = -1;
+    int val = INT_MAX;
+    for (int i = 0; i < frame_count; i++)
+        if (last_accessed[i] < val) {
+            val = last_accessed[i];
+            ret = i;
+        }
+    return ret;
 }
 
 int GEStrategy::last_accessed_max() {
-    
+    int ret = -1;
+    int val = INT_MIN;
+    for (int i = 0; i < frame_count; i++)
+        if (last_accessed[i] > val) {
+            val = last_accessed[i];
+            ret = i;
+        }
+    return ret;
 }
 
 int GEStrategy::added_to_cache_min() {
-
+    int ret = -1;
+    int val = INT_MAX;
+    for (int i = 0; i < frame_count; i++)
+        if (added_to_cache[i] < val) {
+            val = added_to_cache[i];
+            ret = i;
+        }
+    return ret;
 }
 
 int GEStrategy::added_to_cache_max() {
-    
+    int ret = -1;
+    int val = INT_MIN;
+    for (int i = 0; i < frame_count; i++)
+        if (added_to_cache[i] > val) {
+            val = added_to_cache[i];
+            ret = i;
+        }
+    return ret;
 }
 
 int GEStrategy::get_accessed(int frame) {
-
+    return accessed[frame];
 }
 
 void GEStrategy::set_accessed(int frame, int value) {
-
+    accessed[frame] = value;
 }
 
 void GEStrategy::allocate(int page_request) {

@@ -13,6 +13,8 @@ The LFU (Least Frequently Used) strategy removes the page which was accessed the
 
 The CLOCK strategy, also called the second chance strategy, traverses the frames in a round robin way. Each frame has an access flag which can either have the value zero or one. When a page needs to be removed, the algorithm starts iterating over the frames, going to the first one once it reaches the end. If the current frame has the value of its flag equal to zero, its page is removed and the search is finished. If, on the other hand, its flag is equal to one, the flag is set to zero, and the algorithm continues to the next frame, hence the 'second chance' name.
 
+The OPT (optimal) strategy removes the page that won't be used for the longest time in the future. This strategy isn't achievable because it requires the knowledge of the future page requests. It's significance is theoretical, because it can set an upper limit to what is possible to achieve.
+
 \subsection{Cache replacement policy pseudocode}
 The general cache replacement policy looks as follows:
 

@@ -13,6 +13,8 @@ int main(int argc, char* argv[]) {
     std::string requests_path = argv[2];
     int page_count = std::stoi(argv[3]);
     int frame_count = std::stoi(argv[4]);
+    int selection = std::stoi(argv[5]);
+    int curr = std::stoi(argv[6]);
 
     std::vector<int> requests;
     std::ifstream in(requests_path);
@@ -35,10 +37,43 @@ int main(int argc, char* argv[]) {
     iss = std::istringstream(l);
     while (getline(iss, s, ' ')) blacklisted.insert(std::stoi(s));
 
-    for (int i = 0; i < population_count; i++) {
+    if (selection == 1) {
+
+        for (int i = 0; i < population_count; i++) {
+            std::stringstream ss;
+            ss << i;
+            
+            std::string file_name; 
+            file_name += "results/";
+            file_name += ss.str();
+            file_name += ".txt";
+
+            std::ofstream f;
+            f.open(file_name);
+
+            int hits;
+
+            if (blacklisted.find(i) == blacklisted.end()) {
+                Strategy* s = new GEStrategy(requests, page_count, frame_count, i, frame_count);
+                s->simulate();
+                f << s->hits << std::endl;
+                hits = s->hits;
+            }
+            else {
+                f << 0 << std::endl;
+                hits = 0;
+            }
+
+            f.close();
+
+            //std::cout << "\t" << i + 1 << "/" << population_count << "\t\t\t" << hits << std::endl;
+        }
+    }
+
+    else if (selection == 2) {
         std::stringstream ss;
-        ss << i;
-        
+        ss << curr;
+            
         std::string file_name; 
         file_name += "results/";
         file_name += ss.str();
@@ -49,8 +84,8 @@ int main(int argc, char* argv[]) {
 
         int hits;
 
-        if (blacklisted.find(i) == blacklisted.end()) {
-            Strategy* s = new GEStrategy(requests, page_count, frame_count, i, frame_count);
+        if (blacklisted.find(curr) == blacklisted.end()) {
+            Strategy* s = new GEStrategy(requests, page_count, frame_count, curr, frame_count);
             s->simulate();
             f << s->hits << std::endl;
             hits = s->hits;
@@ -61,7 +96,5 @@ int main(int argc, char* argv[]) {
         }
 
         f.close();
-
-        std::cout << "\t" << i + 1 << "/" << population_count << "\t\t\t" << hits << std::endl;
     }
 }

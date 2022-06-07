@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
     int codon_count = std::stoi(argv[2]);
     float mutation_rate = 1 / (float) std::stoi(argv[3]);
     int elitism_count = std::stoi(argv[4]);
+    int selection = std::stoi(argv[5]);
 
     Crossover* crossover = new Crossover();
     Mutation* mutation = new Mutation(mutation_rate);
@@ -90,101 +91,117 @@ int main(int argc, char* argv[]) {
         if (a->value != b->value) return a->value > b->value;
         else return a->index < b->index;
     });
-
+    
     float min, max;
     max = units[0]->value;
     min = units.rbegin()[0]->value;
 
-    //std::cout << "MIN: " << min << "\t\tMAX: " << max << std::endl;
+    if (selection == 1) {
 
-    for (auto i : units) std::cout << i->value << " ";
-    std::cout << std::endl;
+        float range = 0;
+        std::vector<Unit*> new_units;
 
-    float range = 0;
+        if (max != min) {
 
-    if (max != min) {
+            for (Container* c : units)
+                c->coef = A + (B - A) * (c->value - min) / (max - min);
 
-        for (Container* c : units)
-            c->coef = A + (B - A) * (c->value - min) / (max - min);
+            for (Container* c : units) {
+                float x = c->coef;
+                c->coef += range;
+                range += x;
+            }
+        }
 
-        for (Container* c : units) {
-            float x = c->coef;
-            c->coef += range;
-            range += x;
+        else {
+
+            for (Container* c : units) {
+                range++;
+                c->coef = range;
+            }
+        }
+
+        for (int i = 0; i < elitism_count; i++) {
+            new_units.push_back(units[i]->unit);
+        }
+
+        while (new_units.size() < population_count) {
+            float r1, r2;
+
+            r1 = (rand() / (float) RAND_MAX) * range;
+            r2 = (rand() / (float) RAND_MAX) * range;
+
+            int i1 = 0, i2 = 0;
+
+            while (r1 > units[i1]->coef) i1++;
+            while (r2 > units[i2]->coef) i2++;
+
+            Unit* u = crossover->perform(units[i1]->unit, units[i2]->unit);
+
+            u = mutation->perform(u);
+
+            new_units.push_back(u);
+        }
+
+        for (int i = 0; i < new_units.size(); i++) {
+
+            Unit* unit = new_units[i];
+
+            std::stringstream ss;
+            ss << i;
+            
+            std::string file_name; 
+            file_name += "solutions/";
+            file_name += ss.str();
+            file_name += ".txt";
+            
+            std::ofstream f;
+            f.open(file_name);
+
+            for (int i = 0; i < codon_count; i++) f << (int) unit->genome[i] << " ";
+            f << std::endl;
+            f.close();
         }
     }
 
-    else {
+    else if (selection == 2) {
+        int i1, i2, i3;
+        i1 = rand() % population_count;
+        do {
+            i2 = rand() % population_count;
+        } while (i2 != i1);
+        do {
+            i3 = rand() % population_count;
+        } while (i3 != i1 && i3 != i2);
 
-        for (Container* c : units) {
-            range++;
-            c->coef = range;
-        }
-    }
-
-    //std::cerr << "CURR GEN:" << std::endl;
-    for (int i = 0; i < units.size(); i++) {
-        //std::cerr << i + 1 << ":\t\t";
-        for (int j = 0; j < units[i]->unit->codon_count; j++) {
-            //std::cout << (unsigned int) units[i]->unit->genome[j] << " ";
-        }
-        //std::cerr << std::endl;
-    }
-
-    std::vector<Unit*> new_units;
-    for (int i = 0; i < elitism_count; i++) {
-        new_units.push_back(units[i]->unit);
-        //std::cout << "ELITISM: " << i << " " << units[i]->value << std::endl;
-    }
-
-    while (new_units.size() < population_count) {
-        float r1, r2;
-
-        r1 = (rand() / (float) RAND_MAX) * range;
-        r2 = (rand() / (float) RAND_MAX) * range;
-
-        int i1 = 0, i2 = 0;
-
-        while (r1 > units[i1]->coef) i1++;
-        while (r2 > units[i2]->coef) i2++;
+        int best = i1, worst = i1, other;
+        if (units[i2]->value > units[i1]->value) best = i2;
+        if (units[i2]->value < units[i1]->value) worst = i2;
+        if (units[i3]->value > units[i1]->value && units[i3]->value > units[i2]->value) best = i3;
+        if (units[i3]->value < units[i1]->value && units[i3]->value < units[i2]->value) worst = i3;
+        if (best != i1 && worst != i1) other = i1;
+        if (best != i2 && worst != i2) other = i2;
+        if (best != i3 && worst != i3) other = i3;
 
         Unit* u = crossover->perform(units[i1]->unit, units[i2]->unit);
-
         u = mutation->perform(u);
 
-        new_units.push_back(u);
-    }
-
-    //std::cerr << "NEXT GEN:" << std::endl;
-    for (int i = 0; i < new_units.size(); i++) {
-        //std::cerr << i + 1 << ":\t\t";
-        for (int j = 0; j < new_units[i]->codon_count; j++) {
-            //std::cerr << (unsigned int) new_units[i]->genome[j] << " ";
-        }
-        //std::cerr << std::endl;
-    }
-
-    for (int i = 0; i < new_units.size(); i++) {
-
-        Unit* unit = new_units[i];
-
         std::stringstream ss;
-        ss << i;
+        ss << worst;
         
         std::string file_name; 
         file_name += "solutions/";
         file_name += ss.str();
         file_name += ".txt";
-
-        //std::cout << file_name << std::endl;
-
-        //std::remove(file_name.c_str());
         
         std::ofstream f;
         f.open(file_name);
 
-        for (int i = 0; i < codon_count; i++) f << (int) unit->genome[i] << " ";
+        for (int i = 0; i < codon_count; i++) f << (int) u->genome[i] << " ";
         f << std::endl;
         f.close();
+
+        std::cout << worst << std::endl;
+
     }
 }

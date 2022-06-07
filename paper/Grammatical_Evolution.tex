@@ -52,6 +52,8 @@ Our current string is $a\:{<}A{>}\:b\:{<}S{>}$, the index value is $i = 1$, and 
 	\caption{Genotype-phenotype mapping, step 2}
 \end{figure}
 
+\clearpage
+
 Our current string is $a\:a\:b\:{<}C{>}\:b\:{<}S{>}$, the index value is $i = 2$, and the codon value is $168$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $168\:\:MOD\:\:3\:=\:0$, and apply the production at index $0$, which is ${<}C{>}\:::=\:c\:{<}C{>}$.
 
 \begin{figure}[H]
@@ -76,6 +78,8 @@ Our current string is $a\:a\:b\:c\:{<}C{>}\:d\:{<}C{>}\:b\:{<}S{>}$, the index v
 	\caption{Genotype-phenotype mapping, step 5}
 \end{figure}
 
+\clearpage
+
 Our current string is $a\:a\:b\:c\:a\:d\:{<}C{>}\:b\:{<}S{>}$, the index value is $i = 5$, and the codon value is $65$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $65\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
 \begin{figure}[H]
@@ -83,6 +87,8 @@ Our current string is $a\:a\:b\:c\:a\:d\:{<}C{>}\:b\:{<}S{>}$, the index value i
 	\includegraphics[scale=0.6]{parsing_tree_06.png}
 	\caption{Genotype-phenotype mapping, step 6}
 \end{figure}
+
+\clearpage
 
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:{<}S{>}$, the index value is $i = 6$, and the codon value is $127$. The leftmost nonterminal symbol is ${<}S{>}$, which has $2$ productions defined. So we calculate $127\:\:MOD\:\:2\:=\:1$, and apply the production at index $1$, which is ${<}S{>}\:::=\:{<}C{>}\:d\:{<}A{>}$.
 
@@ -92,6 +98,8 @@ Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:{<}S{>}$, the index value is $i =
 	\caption{Genotype-phenotype mapping, step 7}
 \end{figure}
 
+\clearpage
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:{<}C{>}\:d\:{<}A{>}$, the index value is $i = 7$, and the codon value is $26$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $26\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
 \begin{figure}[H]
@@ -99,6 +107,8 @@ Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:{<}C{>}\:d\:{<}A{>}$, the index v
 	\includegraphics[scale=0.6]{parsing_tree_08.png}
 	\caption{Genotype-phenotype mapping, step 8}
 \end{figure}
+
+\clearpage
 
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:{<}A{>}$, the index value is $i = 8$, and the codon value is $130$. The leftmost nonterminal symbol is ${<}A{>}$, which has $3$ productions defined. So we calculate $130\:\:MOD\:\:3\:=\:1$, and apply the production at index $1$, which is ${<}A{>}\:::=\:a\:b\:{<}C{>}$.
 
@@ -108,6 +118,8 @@ Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:{<}A{>}$, the index value i
 	\caption{Genotype-phenotype mapping, step 9}
 \end{figure}
 
+\clearpage
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:{<}C{>}$, the index value is $i = 9$, and the codon value is $100$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $100\:\:MOD\:\:3\:=\:1$, and apply the production at index $1$, which is ${<}C{>}\:::=\:c\:{<}C{>}$.
 
 \begin{figure}[H]
@@ -116,6 +128,8 @@ Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:{<}C{>}$, the index v
 	\caption{Genotype-phenotype mapping, step 10}
 \end{figure}
 
+\clearpage
+
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:{<}C{>}$, the index value is $i = 10$. Since our codon array has only 10 elements, index $i = 10$ is out of bounds, but the mapping process is incomplete, so we apply the wrapping operator and set $i = 0$. The codon value is $176$. The leftmost nonterminal symbol is ${<}C{>}$, which has $3$ productions defined. So we calculate $176\:\:MOD\:\:3\:=\:2$, and apply the production at index $2$, which is ${<}C{>}\:::=\:a$.
 
 \begin{figure}[H]
@@ -123,6 +137,8 @@ Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:{<}C{>}$, the inde
 	\includegraphics[scale=0.6]{parsing_tree_11.png}
 	\caption{Genotype-phenotype mapping, step 11}
 \end{figure}
+
+\clearpage
 
 Our current string is $a\:a\:b\:c\:a\:d\:a\:b\:a\:d\:a\:b\:c\:a$. Since there are no more nonterminal symbols in this string, the mapping process is finished, and this string is the final result of the mapping.
 

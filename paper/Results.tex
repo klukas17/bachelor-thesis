@@ -1,0 +1,20 @@
+\section{Results}
+Once the actual experiments began, several changes had to be made to the configurations of the runs, because the generated strategies rapidly overfitted to the train data.
+
+First of all, a different trace file was chosen for the subsequent runs. The chosen trace file was the 'crafty\_mem.trace'. The first 20000 requests were used as the train dataset, and the subsequent 200000 requests were used as the test dataset. The train dataset contained 1181 unique page requests, and the test dataset contained 2646 unique page requests. This trace file was chosen because it contained fewer unique page requests and more repetition that the 'swim.trace' file, so it seemed like a good fit for evolving cache replacement policies.
+
+Secondly, some parameters of the runs were changes. Population size was increased to 100, and each run consisted of 200 generations. These changes were implemented to cultivate the exploration of the search space. Mutation rate was decreased from 20\% to 5\%, as the rate of 20\% seemed very disruptive.
+
+Another problem that emerged was that the strategies did not evolve at all, since the strategy in which they do nothing and the page from the frame at index 0 is always removed worked relatively well. This was the default strategy since the index of the frame from which the page would be removed was a program variable that was initialised to 0. There was a similar problem where the evolution would find clearly nonsensical and unusable strategies. Two of the most popular strategies that fall into this category were the strategy to choose the frame that corresponds to the time variable and the strategy to choose the frame at the index which is equal to the index of the requested page. A solution to this problem was checking if the strategy doesn't set the frame variable, or if it sets it to the time variable or the requested page index variable, and if some of these cases were true, the strategy would be penalised with the fitness of zero.
+
+Finally, while loops were removed from the grammar. The reason behind this decision was that the strategies found it very hard to use them in a smart way (like the CLOCK strategy use a while loop), and they drastically increased the simulation times, to the point where it would be impossible to run all the simulations in an acceptable timespan. The most common problem with while loops was that the strategies would leave their bodies empty or fill them with nonsensical instructions, and this would be calculated for every frame (since the maximum number of iterations is equal to frame count), for every page request in the data set, for every strategy that used while loops, for every generation, for every run of the experiment.
+
+\subsection{Frame count 100}
+
+\subsection{Frame count 200}
+
+\subsection{Frame count 300}
+
+\subsection{Frame count 500}
+
+\subsection{Result analysis}

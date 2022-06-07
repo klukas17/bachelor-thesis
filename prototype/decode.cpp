@@ -58,10 +58,15 @@ int main(int argc, char* argv[]) {
             decoded = "";
             blacklisted.push_back(i);
         }
+        if (decoded.find("frame=") == std::string::npos || 
+            decoded.find("frame=s->time;") != std::string::npos ||
+            decoded.find("frame=s->page_request;") != std::string::npos)
+            blacklisted.push_back(i);
         std::cout << "int f" << i << "(GEStrategy* s) {" << std::endl;
         std::cout << "\t" << "int iterations = 0;" << std::endl;
         std::cout << "\t" << "int frame = 0;" << std::endl;
         std::cout << "\t" << decoded << std::endl;
+        std::cout << "\t" << "if (frame < 0 || frame >= s->frame_count) frame = 0;" << std::endl;
         std::cout << "\t" << "return frame;" << std::endl;
         std::cout << "}" << std::endl;
     }

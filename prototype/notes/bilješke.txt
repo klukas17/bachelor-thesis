@@ -1,7 +1,0 @@
-init.cpp stvara nasumičnu generaciju i zapisuje ju u solutions/
-
-decode.cpp čita solutions/ i zapisuje rezultat u GeneratedStrategies.h
-
-run.cpp pokreće strategije i zapisuje rezultate u results/
-
-evolution.cpp čita results/, stvara novu generaciju, i zapisuje ju u solutions/

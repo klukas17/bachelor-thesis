@@ -1,9 +1,11 @@
-\documentclass[times, utf8, zavrsni]{fer}
+\documentclass[times, utf8, zavrsni, numeric]{fer}
 \usepackage{booktabs}
 \usepackage{algorithm,algpseudocode}
 \usepackage{lipsum}
 \usepackage{float}
+\usepackage{pdfpages}
 \usepackage{graphicx} 
+\usepackage{hyperref}
 \graphicspath{ {./images/} }
 
 \begin{document}
@@ -20,10 +22,10 @@
 \maketitle
 
 % Ispis stranice s napomenom o umetanju izvornika rada. Uklonite naredbu \izvornik ako želite izbaciti tu stranicu.
-\izvornik
+\includepdf[pages={1}]{izvornik.pdf}
 
 % Dodavanje zahvale ili prazne stranice. Ako ne želite dodati zahvalu, naredbu ostavite radi prazne stranice.
-\zahvala{}
+\zahvala{I would like to express my deepest gratitude to my mentor, prof. Jakobović, for his friendly and motivating mentorship, and his continued support, effort and help in writing this thesis. I would also like to thank my parents, for their support throughout my education.}
 
 \tableofcontents
 
@@ -49,6 +51,12 @@
 
 \chapter{Experimental results}
 
+\input{Experimental_Settings}
+
+\input{Parameter_Optimization}
+
+\input{Results}
+
 \chapter{Conclusion}
 
 \input{Conclusion_Body}
@@ -56,6 +64,7 @@
 \bibliography{literatura}
 \bibliographystyle{fer}
 
+\listoffigures
 
 \appendix
 \chapter{Software architecture}
@@ -64,17 +73,17 @@
 
 
 \begin{sazetak}
-Sažetak na hrvatskom jeziku.
+Genetic programming is a branch of evolutionary computing in which the population consists of computer programs. Grammatical evolution is a popular grammar-based approach to genetic programming, capable of evolving programs in an arbitrary language, using fixed-length arrays of integers as genotypes, a context-free grammar for the definition of the language, and a genotype-phenotype mapping which uses the specified grammar to map integer arrays to computer programs. Evolving cache replacement policies is a popular benchmark problem in the field of genetic programming. The topic of this thesis is using grammatical evolution to evolve cache replacement policies. Generated strategies are compared to classic heuristic approaches to cache management, including  FIFO, LRU and CLOCK algorithms.
 
-\kljucnerijeci{Ključne riječi, odvojene zarezima.}
+\kljucnerijeci{evolutionary computing, genetic programming, genetic algorithm, grammatical evolution, cache replacement policies, optimization, formal grammars}
 \end{sazetak}
 
 % TODO: Navedite naslov na engleskom jeziku.
-\engtitle{Title}
+\engtitle{Evolucija strategija zamjene stranica korištenjem gramatičke evolucije}
 \begin{abstract}
-Abstract.
+Genetsko programiranje je grana evolucijskog računarstva u kojoj populaciju čine računalni programi. Gramatička evolucija je popularan pristup genetskom programiranju koji se bazira na formalnim gramatikama, sposoban evoluirati programe u proizvoljnom jeziku, koristeći polja cijelih brojeva fiksne duljine za genotipe, kontekstno neovisnu gramatiku za definiciju jezika, i mapiranje s genotipa na fenotip koje koristi definiranu gramatiku za preslikavanje s polja cijelih brojeva na računalne programe. Evolucija strategija zamjene stranica je popularan problem u području genetskog programiranja. Tema ovog rada je korištenje gramatičke evolucije za evoluiranje strategija zamjene stranica. Generirane strategije su uspoređene s klasičnim heurističkim pristupima za upravljanje memorijom, uključujući algoritme FIFO, LRU i CLOCK.
 
-\keywords{Keywords.}
+\keywords{evolucijsko računarstvo, genetsko programmiranje, genetski algoritam, gramatička evolucija, strategije zamjene stranica, optimizacija, formalne gramatike}
 \end{abstract}
 
 \end{document}
