@@ -12,7 +12,7 @@ Symbols ${<}expression{>}$ and ${<}term{>}$ will be used to generate simple expr
 Symbols ${<}bool{>}$ and ${<}number{>}$ will be used to generate constants.
 
 \subsection{Information stored by each strategy}
-Each strategy will keep track of some information about frames and pages, and this information will be available when choosing a frame in which the requested page will be stored. Each strategy will have four of these information arrays. The generated cache replacement policies will not manipulate these arrays directly, instead, each array will have some functions which are used to access it. In this sense, the functions used to access the information arrays can be considered features of our learning problem.
+Each strategy will keep track of some information about frames and pages, and this information will be available when choosing a frame in which the requested page will be stored. Each strategy will have four of these information arrays. The generated cache replacement policies will not manipulate these arrays directly, instead, each array will have some functions which are used to access it. In this sense, the functions used to access the information arrays can be considered as features of our learning problem.
 
 The first array is called $last\_accessed$ and it keeps track of when each frame was last accessed. We will also introduce functions $last\_accessed\_min$ and $last\_accessed\_max$ which will return the index of the frame which was accessed least recently and most recently, respectively.
 
