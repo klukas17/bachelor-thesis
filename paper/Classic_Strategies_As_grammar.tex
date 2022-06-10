@@ -1,5 +1,5 @@
 \section{Classic strategies written using the described grammar}
-A desired property of the grammar used in grammatical evolution is that it's able to generate all classic heuristic solutions, while also being able to generate some new solutions. In this subchapter, we will go through the classic stragies, which were explained in the subchapter 3.1.2., and show how they can be written using the grammar described in the subchapter 3.2.
+A desired property of the grammar used in grammatical evolution is that it's able to generate all classic heuristic solutions, while also being able to generate some new solutions. In this subchapter, we will go through the classic strategies, which were explained in the subchapter 3.1.2., and show how they can be written using the grammar described in the subchapter 3.2.
 
 \subsection{FIFO (First In First Out)}
 
@@ -30,6 +30,8 @@ The CLOCK strategy can be written like:
 \State $ \indent num1 = num1 + 1;$
 \State $ \indent if\:(num1 >= frame\_count)\:\{$
 \State $ \indent\indent num1 = 0;$
+\State $ \indent \}$
+\State $ \indent iterations++;$
 \State $ \}$
 \State $frame = num1;$
 \end{algorithmic}

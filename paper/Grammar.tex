@@ -7,7 +7,7 @@ The start symbol is ${<}block{>}$ and it corresponds to zero or more simpler sta
 
 During the process of writing and fine-tuning the grammar, one of the problems was the possibility of loops occuring inside loops. This would drastically slow down the process of choosing a frame, which is a decision that should be made relatively quickly. To solve this problem, we will introduce the ${<}block\_no\_loop{>}$ and ${<}statement\_no\_loop{>}$ symbols. These symbols are semantically equivalent to ${<}block{>}$ and ${<}statement{>}$, except they won't be able to contains loops, and by introducing these symbols we will ensure that loops can't be nested.
 
-Symbols ${<}expression{>}$ and ${<}term{>}$ will be used to generate simple expressions. The ${<}modifiable{>}$ symbol	 will agregate all terms which can go on the left and the right side of the equality operator '=', while the ${<}non\_modifiable{>}$ symbol will aggregate all terms which can go only on the right side of the equality operator.
+Symbols ${<}expression{>}$ and ${<}term{>}$ will be used to generate simple expressions. The ${<}modifiable{>}$ symbol	 will aggregate all terms which can go on the left and the right side of the equality operator '=', while the ${<}non\_modifiable{>}$ symbol will aggregate all terms which can go only on the right side of the equality operator.
 
 Symbols ${<}bool{>}$ and ${<}number{>}$ will be used to generate constants.
 
@@ -26,7 +26,7 @@ Each strategy will also be given some arrays and variables which aren't updated 
 
 Each strategy will have two of these arrays, and they are accessed using the $read$ and $write$ functions. The $read$ function takes two arguments, the first being the index of the array, and the second being the index (the frame number) in that array, and this function reads the value in that array at that index and returns it. The $write$ function takes three arguments, the first being the index of the array, the second being the index (the frame number) in that array, and the third being the value that is being written at that index in that array.
 
-Next to these two arrays, each strategy will also have three free variables which can they can change however they please, and these variables are called $num1$, $num2$ and $num3$.
+Next to these two arrays, each strategy will also have three free variables which they can change however they please, and these variables are called $num1$, $num2$ and $num3$.
 
 \subsection{Symbols ${<}block{>}$, ${<}block\_no\_loop{>}$}
 Productions for the ${<}block{>}$ symbol are:
@@ -52,7 +52,7 @@ $ \indent\indent |\:\text{if}\:\text{(}\:{<}expression{>}\:\text{)}\:\text{\{}\:
 $ \indent\indent |\:\text{iterations = 0;}\:\text{while}\:\text{(}\:{<}expression{>}\:\text{\&\& iterations < frame\_count}\:\text{)}\:\text{\{}\:\\{<}block\_no\_loop{>}\:\text{iterations++;}\:\text{\}} $\\
 $ \indent\indent |\:{<}modifiable{>}\:\text{=}\:{<}term{>}\:\text{;} $\\
 $ \indent\indent |\:\text{write}\:\text{(}\:{<}info\_field\_index{>}\:\text{,}\:{<}term{>}\:\text{,}\:\:{<}term{>}\:\text{)}\:\text{;} $\\
-$ \indent\indent |\:\text{set\_accessed}\:\text{(}\:{<}term{>}\text{,}{<}term{>}\:\text{)}$
+$ \indent\indent |\:\text{set\_accessed}\:\text{(}\:{<}term{>}\text{,}{<}term{>}\:\text{)};$
 
 The first production generates simple if-else branches, while the second production generates if branches without the else part. The third production generates loops. Loops are written as while loops, which initialize the counter variable $iterations$ to zero, and then the loop is executed while some expression is evaluated as true and the iteration count is smaller than the number of frames in the cache. After each iteration, the $iterations$ variable is increased by one. The fourth production generates instructions with the equality operator. Finally, the fifth production generates calls of the $write$ function. This function is explained in the subchapter 3.2.3.
 
@@ -103,7 +103,7 @@ $ \indent\indent |\:\text{num1} $\\
 $ \indent\indent |\:\text{num2} $\\
 $ \indent\indent |\:\text{num3} $
 
-We have already established that our strategies will only evolve the line 7 in the Algorithm 2, that being the decision in which frame should we put the page that isn't currently in the cache if all the frames are taken. For the sake of convenience, we will model this with functions that initialize the $frame$ variable to zero and return that $frame$ variable. The $frame$ variable corresponds to the index of the chosen frame. We will want our strategies to modify this variable from its initial value of zero, and that's why this variable will be modifiable. The $num1$, $num2$ and $num3$ variables are the free variables of the each strategy, and they are explained in the subchapter 3.2.3.
+We have already established that our strategies will only evolve the line 7 in the Algorithm 2, that being the decision in which frame should we put the page that isn't currently in the cache if all the frames are taken. For the sake of convenience, we will model this with functions that initialize the $frame$ variable to zero and return that $frame$ variable. The $frame$ variable corresponds to the index of the chosen frame. We will want our strategies to modify this variable from its initial value of zero, and that's why this variable will be modifiable. The $num1$, $num2$ and $num3$ variables are the free variables of each strategy, and they are explained in the subchapter 3.2.3.
 
 \subsection{Symbol ${<}non\_modifiable{>}$}
 Productions for the ${<}non\_modifiable{>}$ symbol are:
@@ -125,7 +125,7 @@ $ \indent\indent |\:\text{get\_accessed}\:\text{(}\:{<}term{>}\:\text{)}$\\
 $ \indent\indent |\:{<}number{>} $\\
 $ \indent\indent |\:{<}bool{>} $
 
-The variable $time$ refers to the index of the current request, and it gets increased by one for each new request. The variable $cache\_size$ refers to the number of frames in the cache, and the $page\_request$ variable refers to the page index of the page that is currently being requested. Function $find\_min$ takes one input argument, which is the index of strategy's arrays (and it can be one or two since each strategy has two info arrays), and it returns the index at which this array has the minimal vaue. The function $find\_max$ works in a similar way, except it returns the index at which the array has the maximal value. The rest of the productions are explained in the subchapters 3.2.2. and 3.2.3.
+The variable $time$ refers to the index of the current request, and it gets increased by one for each new request. The variable $cache\_size$ refers to the number of frames in the cache, and the $page\_request$ variable refers to the page index of the page that is currently being requested. Function $find\_min$ takes one input argument, which is the index of strategy's arrays (and it can be one or two since each strategy has two info arrays), and it returns the index at which this array has the minimal vaule. The function $find\_max$ works in a similar way, except it returns the index at which the array has the maximal value. The rest of the productions are explained in the subchapters 3.2.2. and 3.2.3.
 
 \subsection{Symbol ${<}bool{>}$}
 Productions for the ${<}bool{>}$ symbol are:

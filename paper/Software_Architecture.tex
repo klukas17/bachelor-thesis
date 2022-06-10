@@ -32,11 +32,11 @@ For the sake of simplicity and the adherence to the 'separation of concerns' pri
 
 \begin{list}{$\bullet$}{}  	
 	\item \textbf{init} - initializes a random population and stores each unit's genotype in a separate file inside the /solutions directory
-	\item \textbf{decode} - reads the genotypes of every unit inside the current population and decodes their genotypes to their phenotypes, which are then stored inside the GeneratedStrategies
+	\item \textbf{decode} - reads the genotypes of every unit inside the current population and decodes their genotypes onto their phenotypes, which are then stored inside the GeneratedStrategies
 	\item \textbf{run} - tests all strategies from the GeneratedStrategies using the train data, and stores their scores inside the /results directory
 	\item \textbf{evolution} - reads each strategy's score and performs the evolutionary process of creating a new generation, which is then stored inside the /solutions directory
 	\item \textbf{test\_generated\_strategy} - simulates a generated strategy using the test data and outputs its hit count
-	\item \textbf{test\_heuristic\_strategies} - simulates the heuristic stragies using the test data and outputs their hit counts
+	\item \textbf{test\_heuristic\_strategies} - simulates the heuristic strategies using the test data and outputs their hit counts
 \end{list}
 
 During each iteration of the evolutionary process, new strategies are generated and stored as C++ files, which need to be compiled before they can be run. The class responsible for decoding the genotype of each unit, which is an array of 8-bit numbers, to its corresponding phenotype, which is a computer program, is the GrammaticalEvolution class. This class has a $decode$ method which takes as input some Unit and returns its phenotype representation as a string. This string needs to be properly placed into a specific file, so that it can be correctly compiled and run. This is the responsibility of the main loop of the program. This main loop isn't written as a C++ file, instead it is a bash script. This bash script manages and calls the six files which do a specific part of the evolutionary process, recompiles the parts of the code that change during each iteration, and assures the persistency of the generated strategies between each run. Each strategy has a genotype, phenotype and score, and each of these is stored inside a different textual file.

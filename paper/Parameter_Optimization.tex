@@ -1,7 +1,7 @@
-\section{Parameter optimization}
-Before starting the experiments, some average non-extreme values for the parameters had to be chosen. The frame count was set to 100, the mutation rate was set to 1\%, the population size was set to 30, the codon count was set to 20 and the maximum number of wrappings was set to 3. The starting number of generations for a generational algorithm is 50, while the number of generations for a steady-state algorithm is 500.
+ \section{Parameter optimization}
+Before starting the experiments, some average non-extreme values for the parameters had to be chosen. The frame count was set to 100, the mutation rate was set to 1\%, the population size was set to 30, the codon count was set to 20 and the maximum number of wrappings was set to 3. The starting number of generations for a generational algorithm is 50, while the number of generations for a steady-state algorithm is 500. This is because the generational algorithm creates a completely new generation at each turn, while the steady-state algorithm changes only one unit.
 
-The fitness values represent the number of hits during the simulation of a strategy using a dataset which contains 20000 requests.
+The fitness values represent the number of hits during the simulation of a strategy using a dataset which contains 20000 requests. The stopping criteria at every run was reaching the predetermined number of generations.
 
 \subsection{Selection operator}
 The first parameter that was optimized was the selection operator. The first selection operator that was considered was the fitness proportional roulette-wheel selection in a generational genetic algorithm, and the second selection operator that was considered was the tournament selection in a steady-state genetic algorithm.
@@ -19,7 +19,7 @@ The roulette-wheel selection had the average fitness of 5325.4, while the tourna
 Running 10 experiments using the roulette-wheel selection took about 25 minutes, while running 10 experiments with tournament selection tok about 60 minutes. I believe that both selection operators were given an equal chance, and the roulette-wheel selection cleary emerged as superior.
 
 \subsection{Mutation rate}
-The second parameter that was optimized was the mutation rate. Mutation rate was initially set to 1\%, which was shown to be relatively small during the runs comparing the selection operators. So, the mutation rates tested were 1\%, 2\%, 5\%, 10\% and 20\%.
+The second parameter that was optimized was the mutation rate. Mutation rate was initially set to 1\%, which was shown to be relatively small during the runs comparing the selection operators. So, the tested mutation rates were 1\%, 2\%, 5\%, 10\% and 20\%.
 
 All of these runs had the median fitness of 18999, so the average fitness was used for analysis.
 
