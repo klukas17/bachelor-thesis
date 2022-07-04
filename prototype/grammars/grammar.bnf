@@ -52,7 +52,6 @@
                    | 's->added_to_cache_min' '(' ')'
                    | 's->added_to_cache_max' '(' ')'
                    | 's->get_accessed' '(' <term> ')'
-                   | 's->page_access_count_min' '(' ')'
                    | <number>
                    | <bool>
 
